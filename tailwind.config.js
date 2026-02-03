@@ -10,7 +10,7 @@ export default {
       },
       colors: {
         accent: '#003366',
-        primary: '#0052FF',
+        primary: '#003366',
       },
       accentColor: {
         DEFAULT: '#003366',
