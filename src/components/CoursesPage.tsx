@@ -22,6 +22,7 @@ interface Course {
   color: string;
   locked: boolean;
   aiSuggested?: boolean;
+  coverImage: string;
 }
 
 interface Notification {
@@ -52,6 +53,7 @@ export default function CoursesPage({ onBack, canGoBack }: CoursesPageProps) {
       color: '#F2C94C',
       locked: false,
       aiSuggested: true,
+      coverImage: 'https://s3.iatom.site/atom/Financas.webp',
     },
     {
       id: '2',
@@ -67,6 +69,7 @@ export default function CoursesPage({ onBack, canGoBack }: CoursesPageProps) {
       color: '#6C63FF',
       locked: false,
       aiSuggested: true,
+      coverImage: 'https://s3.iatom.site/atom/Trader.webp',
     },
     {
       id: '3',
@@ -81,20 +84,7 @@ export default function CoursesPage({ onBack, canGoBack }: CoursesPageProps) {
       icon: Award,
       color: '#27AE60',
       locked: true,
-    },
-    {
-      id: '4',
-      title: 'Planejamento de Aposentadoria',
-      description: 'Construa sua segurança financeira de longo prazo',
-      progress: 0,
-      totalLessons: 18,
-      completedLessons: 0,
-      duration: '6h 45min',
-      level: 'Avançado',
-      category: 'Planejamento',
-      icon: Users,
-      color: '#E67E22',
-      locked: true,
+      coverImage: 'https://s3.iatom.site/atom/op%C3%A7oes-inteligentes.jpg',
     },
   ];
 
@@ -248,7 +238,7 @@ export default function CoursesPage({ onBack, canGoBack }: CoursesPageProps) {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {filteredCourses.map((course, index) => {
             const Icon = course.icon;
             return (
@@ -258,107 +248,106 @@ export default function CoursesPage({ onBack, canGoBack }: CoursesPageProps) {
                 style={{ animationDelay: `${index * 100}ms` }}
               >
                 {course.aiSuggested && (
-                  <div className="absolute -top-2 -right-2 z-10 flex items-center gap-1.5 px-3 py-1.5 bg-purple-500 text-white rounded-full text-xs font-semibold shadow-lg">
+                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1.5 px-3 py-1.5 bg-purple-500/90 backdrop-blur-sm text-white rounded-full text-xs font-semibold shadow-lg">
                     <Brain className="w-3.5 h-3.5" />
                     IA Recomenda
                   </div>
                 )}
 
-                <div className={`relative bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 border transition-all duration-300 ${
+                <div className={`relative bg-white/5 backdrop-blur-sm rounded-2xl border overflow-hidden transition-all duration-300 ${
                   course.locked
                     ? 'border-white/10 opacity-75'
-                    : 'border-white/20 hover:border-[#F2C94C]/50 hover:shadow-xl hover:shadow-[#F2C94C]/10'
+                    : 'border-white/20 hover:border-[#F2C94C]/50 hover:shadow-2xl hover:shadow-[#F2C94C]/10 hover:scale-[1.02]'
                 }`}>
-                  <div className="flex items-start gap-4 mb-4">
-                    <div
-                      className="flex-shrink-0 w-14 h-14 sm:w-16 sm:h-16 rounded-xl flex items-center justify-center shadow-lg"
-                      style={{ backgroundColor: `${course.color}20`, border: `1px solid ${course.color}40` }}
-                    >
-                      <Icon className="w-7 h-7 sm:w-8 sm:h-8" style={{ color: course.color }} />
+                  <div className="relative aspect-video w-full overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900">
+                    <img
+                      src={course.coverImage}
+                      alt={course.title}
+                      className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                    />
+                    {course.locked && (
+                      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center">
+                        <Lock className="w-12 h-12 text-white/60" />
+                      </div>
+                    )}
+                    {!course.locked && course.progress > 0 && (
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
+                        <div
+                          className="h-full bg-[#F2C94C] transition-all duration-500"
+                          style={{ width: `${course.progress}%` }}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-4 sm:p-5">
+                    <div className="flex items-start justify-between gap-2 mb-2">
+                      <h3 className="text-base sm:text-lg font-bold text-white leading-tight line-clamp-2 flex-1">
+                        {course.title}
+                      </h3>
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-start justify-between gap-2 mb-2">
-                        <h3 className="text-lg sm:text-xl font-bold text-white leading-tight">
-                          {course.title}
-                        </h3>
-                        {course.locked && (
-                          <Lock className="w-5 h-5 text-white/40 flex-shrink-0" />
-                        )}
-                      </div>
+                    <div className="flex items-center gap-2 mb-3">
                       <span className="inline-block px-2.5 py-1 bg-white/10 text-white/70 rounded-full text-xs font-medium">
                         {course.level}
                       </span>
+                      {!course.locked && course.progress > 0 && (
+                        <span className="inline-block px-2.5 py-1 bg-[#F2C94C]/20 text-[#F2C94C] rounded-full text-xs font-medium">
+                          {course.progress}% concluído
+                        </span>
+                      )}
                     </div>
-                  </div>
 
-                  <p className="text-sm text-white/70 mb-4 leading-relaxed">
-                    {course.description}
-                  </p>
+                    <p className="text-sm text-white/70 mb-4 leading-relaxed line-clamp-2">
+                      {course.description}
+                    </p>
 
-                  <div className="space-y-3 mb-5">
-                    <div className="flex items-center justify-between text-xs text-white/60">
-                      <span>{course.completedLessons} de {course.totalLessons} aulas</span>
-                      <span>{course.progress}%</span>
-                    </div>
-                    <div className="w-full bg-white/10 rounded-full h-2 overflow-hidden">
-                      <div
-                        className="h-full rounded-full transition-all duration-500"
-                        style={{
-                          width: `${course.progress}%`,
-                          backgroundColor: course.color,
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="flex items-center gap-4 text-xs text-white/60">
+                    <div className="flex items-center gap-4 text-xs text-white/60 mb-4">
                       <div className="flex items-center gap-1.5">
-                        <Clock className="w-4 h-4" />
+                        <Clock className="w-3.5 h-3.5" />
                         {course.duration}
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <BookOpen className="w-4 h-4" />
+                        <BookOpen className="w-3.5 h-3.5" />
                         {course.totalLessons} aulas
                       </div>
                     </div>
-                  </div>
 
-                  <button
-                    disabled={course.locked}
-                    className={`w-full flex items-center justify-center gap-2 py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                      course.locked
-                        ? 'bg-white/5 text-white/40 cursor-not-allowed'
-                        : course.progress > 0
-                        ? 'bg-white/10 text-white hover:bg-white/15'
-                        : 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 shadow-lg hover:scale-105 active:scale-95'
-                    }`}
-                  >
-                    {course.locked ? (
-                      <>
-                        <Lock className="w-4 h-4" />
-                        Bloqueado
-                      </>
-                    ) : course.progress > 0 ? (
-                      <>
-                        <Play className="w-4 h-4" />
-                        Continuar
-                      </>
-                    ) : (
-                      <>
-                        <Play className="w-4 h-4" />
-                        Começar Agora
-                      </>
+                    <button
+                      disabled={course.locked}
+                      className={`w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                        course.locked
+                          ? 'bg-white/5 text-white/40 cursor-not-allowed'
+                          : course.progress > 0
+                          ? 'bg-white/10 text-white hover:bg-white/15'
+                          : 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 shadow-lg'
+                      }`}
+                    >
+                      {course.locked ? (
+                        <>
+                          <Lock className="w-4 h-4" />
+                          Bloqueado
+                        </>
+                      ) : course.progress > 0 ? (
+                        <>
+                          <Play className="w-4 h-4" />
+                          Continuar
+                        </>
+                      ) : (
+                        <>
+                          <Play className="w-4 h-4" />
+                          Começar Agora
+                        </>
+                      )}
+                    </button>
+
+                    {!course.locked && course.progress === 0 && course.aiSuggested && (
+                      <p className="text-center text-xs text-purple-300 mt-2 flex items-center justify-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5" />
+                        Recomendado para você
+                      </p>
                     )}
-                  </button>
-
-                  {!course.locked && course.progress === 0 && course.aiSuggested && (
-                    <p className="text-center text-xs text-purple-300 mt-3 flex items-center justify-center gap-1.5">
-                      <Sparkles className="w-3.5 h-3.5" />
-                      Perfeito para o seu perfil
-                    </p>
-                  )}
+                  </div>
                 </div>
               </div>
             );
