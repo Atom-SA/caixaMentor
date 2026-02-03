@@ -34,23 +34,27 @@ export default function PlayerPage({ onBack }: PlayerPageProps) {
             </h1>
           </div>
 
-          <div className="relative w-full bg-black rounded-xl overflow-hidden shadow-2xl" style={{ height: '565px' }}>
+          <div className="relative w-full bg-black rounded-xl overflow-hidden shadow-2xl">
             {!showChat ? (
-              <iframe
-                className="w-full h-full"
-                src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
-                title="Video Player"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              <div className="aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`}
+                  title="Video Player"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
             ) : (
-              <iframe
-                className="w-full h-full"
-                src={chatUrl}
-                title="Chat Mentor IA"
-                allow="microphone; camera"
-                allowFullScreen
-              />
+              <div style={{ height: '565px' }}>
+                <iframe
+                  className="w-full h-full"
+                  src={chatUrl}
+                  title="Chat Mentor IA"
+                  allow="microphone; camera"
+                  allowFullScreen
+                />
+              </div>
             )}
           </div>
 
