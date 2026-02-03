@@ -4,7 +4,11 @@ import PageHeader from './PageHeader';
 import BackButton from './BackButton';
 import { BookOpen, TrendingUp, Sparkles, Check, Lock } from 'lucide-react';
 
-const ActionPlan: React.FC<FormStepProps> = ({ formData, onBack, canGoBack }) => {
+interface ActionPlanProps extends FormStepProps {
+  onStartCourses?: () => void;
+}
+
+const ActionPlan: React.FC<ActionPlanProps> = ({ formData, onBack, canGoBack, onStartCourses }) => {
   const steps = [
     {
       number: 1,
@@ -141,6 +145,11 @@ const ActionPlan: React.FC<FormStepProps> = ({ formData, onBack, canGoBack }) =>
 
                         <button
                           disabled={!step.available}
+                          onClick={() => {
+                            if (step.available && step.number === 1 && onStartCourses) {
+                              onStartCourses();
+                            }
+                          }}
                           className={`w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
                             step.available
                               ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 shadow-lg hover:shadow-[#F2C94C]/30 hover:scale-105 active:scale-95 cursor-pointer'

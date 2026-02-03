@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FormData } from '../types/form';
 import { formConfig, findStepById, getFirstStep } from '../formConfig';
 import ResultsPage from './ResultsPage';
+import CoursesPage from './CoursesPage';
 
 // sessionStorage key for form data
 const FORM_DATA_STORAGE_KEY = 'prevent-quiz-responses';
@@ -43,6 +44,7 @@ export default function FormNavigation() {
   const [history, setHistory] = useState<string[]>([]); // Track visited steps for back navigation
   const [isComplete, setIsComplete] = useState(false);
   const [finalPrice, setFinalPrice] = useState<string | null>(null);
+  const [showCourses, setShowCourses] = useState(false);
 
   // Dynamic sub-flow state for hormone therapy
   const [isDynamicSubFlowActive, setIsDynamicSubFlowActive] = useState(false);
@@ -233,7 +235,12 @@ export default function FormNavigation() {
 
   // Handle back navigation
   const handleBack = () => {
-    
+    if (showCourses) {
+      // If we're on the courses screen, go back to action plan
+      setShowCourses(false);
+      return;
+    }
+
     if (isComplete) {
       // If we're on the complete screen, go back to last step
       setIsComplete(false);
@@ -347,8 +354,12 @@ export default function FormNavigation() {
 
   // Render the current step component
   const renderCurrentStep = () => {
+    if (showCourses) {
+      return <CoursesPage onBack={handleBack} canGoBack={true} />;
+    }
+
     if (isComplete) {
-      return <ResultsPage formData={formData} onBack={handleBack} finalPrice={finalPrice || undefined} />;
+      return <ResultsPage formData={formData} onBack={handleBack} canGoBack={canGoBack()} finalPrice={finalPrice || undefined} />;
     }
 
     const currentStep = getCurrentStep();
@@ -384,15 +395,22 @@ export default function FormNavigation() {
 
     // Render the step's component with the required props
     const StepComponent = currentStep.component;
+    const baseProps = {
+      onContinue: handleContinue,
+      onBack: handleBack,
+      canGoBack: canGoBack(),
+      formData: formData,
+      currentMedication: currentDynamicMedication,
+      questionNumber: questionNumber,
+    };
+
+    // Add onStartCourses prop if this is the ActionPlan component
+    const componentProps = currentStepId === 'plan'
+      ? { ...baseProps, onStartCourses: () => setShowCourses(true) }
+      : baseProps;
+
     return (
-      <StepComponent
-        onContinue={handleContinue}
-        onBack={handleBack}
-        canGoBack={canGoBack()}
-        formData={formData}
-        currentMedication={currentDynamicMedication}
-        questionNumber={questionNumber}
-      />
+      <StepComponent {...componentProps} />
     );
   };
 
