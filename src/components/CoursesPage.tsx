@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { BookOpen, TrendingUp, Brain, Bell, CheckCircle2, Lock, Play, Clock, Award, Users, ArrowRight, Sparkles } from 'lucide-react';
+import { BookOpen, TrendingUp, Brain, Bell, CheckCircle2, Lock, Play, Clock, Award, Users, ArrowRight, Sparkles, BarChart3 } from 'lucide-react';
 import Logo from './Logo';
 import BackButton from './BackButton';
 
 interface CoursesPageProps {
   onBack: () => void;
   canGoBack?: boolean;
+  onNavigateToReports: () => void;
 }
 
 interface Course {
@@ -34,7 +35,7 @@ interface Notification {
   icon: any;
 }
 
-export default function CoursesPage({ onBack, canGoBack }: CoursesPageProps) {
+export default function CoursesPage({ onBack, canGoBack, onNavigateToReports }: CoursesPageProps) {
   const [activeTab, setActiveTab] = useState<'all' | 'in-progress' | 'completed'>('all');
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -138,13 +139,23 @@ export default function CoursesPage({ onBack, canGoBack }: CoursesPageProps) {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
           <Logo invert height="h-5" brightness="10" />
 
-          <button
-            onClick={() => setShowNotifications(!showNotifications)}
-            className="relative p-2 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <Bell className="w-6 h-6 text-white" />
-            <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#F2C94C] rounded-full animate-pulse" />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={onNavigateToReports}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-[#F2C94C] text-[#003366] rounded-lg font-semibold text-sm hover:bg-[#F2C94C]/90 transition-all"
+            >
+              <BarChart3 className="w-4 h-4" />
+              <span className="hidden sm:inline">Relatórios</span>
+            </button>
+
+            <button
+              onClick={() => setShowNotifications(!showNotifications)}
+              className="relative p-2 hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <Bell className="w-6 h-6 text-white" />
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#F2C94C] rounded-full animate-pulse" />
+            </button>
+          </div>
         </div>
       </div>
 

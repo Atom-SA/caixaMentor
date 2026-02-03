@@ -3,6 +3,7 @@ import { FormData } from '../types/form';
 import { formConfig, findStepById, getFirstStep } from '../formConfig';
 import ResultsPage from './ResultsPage';
 import CoursesPage from './CoursesPage';
+import ReportsPage from './ReportsPage';
 
 // sessionStorage key for form data
 const FORM_DATA_STORAGE_KEY = 'prevent-quiz-responses';
@@ -45,6 +46,7 @@ export default function FormNavigation() {
   const [isComplete, setIsComplete] = useState(false);
   const [finalPrice, setFinalPrice] = useState<string | null>(null);
   const [showCourses, setShowCourses] = useState(false);
+  const [showReports, setShowReports] = useState(false);
 
   // Dynamic sub-flow state for hormone therapy
   const [isDynamicSubFlowActive, setIsDynamicSubFlowActive] = useState(false);
@@ -235,6 +237,12 @@ export default function FormNavigation() {
 
   // Handle back navigation
   const handleBack = () => {
+    if (showReports) {
+      // If we're on the reports screen, go back to courses
+      setShowReports(false);
+      return;
+    }
+
     if (showCourses) {
       // If we're on the courses screen, go back to action plan
       setShowCourses(false);
@@ -354,8 +362,12 @@ export default function FormNavigation() {
 
   // Render the current step component
   const renderCurrentStep = () => {
+    if (showReports) {
+      return <ReportsPage onBack={handleBack} />;
+    }
+
     if (showCourses) {
-      return <CoursesPage onBack={handleBack} canGoBack={true} />;
+      return <CoursesPage onBack={handleBack} canGoBack={true} onNavigateToReports={() => setShowReports(true)} />;
     }
 
     if (isComplete) {
