@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronLeft, Menu, Play, MessageCircle, Send } from 'lucide-react';
+import { ChevronLeft, Menu, Play, MessageCircle } from 'lucide-react';
 
 interface PlayerPageProps {
   onBack: () => void;
@@ -7,26 +7,9 @@ interface PlayerPageProps {
 
 export default function PlayerPage({ onBack }: PlayerPageProps) {
   const [showChat, setShowChat] = useState(false);
-  const [messages, setMessages] = useState<{ text: string; sender: 'user' | 'ai' }[]>([
-    { text: 'Olá! Como posso ajudar você com esta aula?', sender: 'ai' }
-  ]);
-  const [inputMessage, setInputMessage] = useState('');
 
   const videoId = 'Ke90Tje7VS0';
-
-  const handleSendMessage = () => {
-    if (inputMessage.trim()) {
-      setMessages([...messages, { text: inputMessage, sender: 'user' }]);
-      setInputMessage('');
-
-      setTimeout(() => {
-        setMessages(prev => [...prev, {
-          text: 'Entendi sua dúvida! Vou te ajudar com isso. Esta aula aborda conceitos importantes sobre o tema.',
-          sender: 'ai'
-        }]);
-      }, 1000);
-    }
-  };
+  const chatUrl = 'https://mentor-ia-picpay.vercel.app/?ID=18563c46-eb92-40c6-ada8-385b214bc7cf&lessonID=a11cc57f-27cc-470c-8b47-e04961f0a498';
 
   return (
     <div className="min-h-screen bg-[#003366] flex flex-col">
@@ -63,44 +46,14 @@ export default function PlayerPage({ onBack }: PlayerPageProps) {
                 />
               </div>
             ) : (
-              <div className="aspect-video bg-gradient-to-br from-[#002244] to-[#003366] flex flex-col">
-                <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                  {messages.map((msg, idx) => (
-                    <div
-                      key={idx}
-                      className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div
-                        className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
-                          msg.sender === 'user'
-                            ? 'bg-[#F2C94C] text-[#003366]'
-                            : 'bg-white/10 text-white border border-white/20'
-                        }`}
-                      >
-                        <p className="text-sm leading-relaxed">{msg.text}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="p-4 bg-black/30 border-t border-white/10">
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={inputMessage}
-                      onChange={(e) => setInputMessage(e.target.value)}
-                      onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                      placeholder="Digite sua dúvida..."
-                      className="flex-1 px-4 py-2.5 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-[#F2C94C] transition-colors text-sm"
-                    />
-                    <button
-                      onClick={handleSendMessage}
-                      className="px-4 py-2.5 bg-[#F2C94C] text-[#003366] rounded-lg font-semibold hover:bg-[#F2C94C]/90 transition-all flex items-center gap-2"
-                    >
-                      <Send className="w-4 h-4" />
-                    </button>
-                  </div>
-                </div>
+              <div className="aspect-video">
+                <iframe
+                  className="w-full h-full"
+                  src={chatUrl}
+                  title="Chat Mentor IA"
+                  allow="microphone; camera"
+                  allowFullScreen
+                />
               </div>
             )}
           </div>
