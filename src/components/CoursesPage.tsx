@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, TrendingUp, Brain, Bell, CheckCircle2, Lock, Play, Clock, Award, Users, ArrowRight, Sparkles, BarChart3 } from 'lucide-react';
+import { BookOpen, TrendingUp, Brain, Bell, CheckCircle2, Lock, Play, Clock, Award, Users, ArrowRight, Sparkles, BarChart3, Zap, ChevronRight, Star, Target } from 'lucide-react';
 import Logo from './Logo';
 import BackButton from './BackButton';
 
@@ -35,9 +35,67 @@ interface Notification {
   icon: any;
 }
 
+interface AILesson {
+  id: string;
+  title: string;
+  courseTitle: string;
+  duration: string;
+  status: 'completed' | 'current' | 'next' | 'locked';
+  aiReason: string;
+  order: number;
+}
+
 export default function CoursesPage({ onBack, canGoBack, onNavigateToReports }: CoursesPageProps) {
   const [activeTab, setActiveTab] = useState<'all' | 'in-progress' | 'completed'>('all');
   const [showNotifications, setShowNotifications] = useState(false);
+
+  const aiLearningPath: AILesson[] = [
+    {
+      id: '1',
+      title: 'Entendendo seu Fluxo de Caixa',
+      courseTitle: 'Fundamentos do Planejamento Financeiro',
+      duration: '15 min',
+      status: 'completed',
+      aiReason: 'Base essencial identificada no seu perfil',
+      order: 1,
+    },
+    {
+      id: '2',
+      title: 'Criando seu Primeiro Orçamento',
+      courseTitle: 'Fundamentos do Planejamento Financeiro',
+      duration: '20 min',
+      status: 'completed',
+      aiReason: 'Continuidade natural após fluxo de caixa',
+      order: 2,
+    },
+    {
+      id: '3',
+      title: 'Identificando Gastos Desnecessários',
+      courseTitle: 'Gestão de Orçamento Pessoal',
+      duration: '18 min',
+      status: 'current',
+      aiReason: 'Seu diagnóstico indica necessidade de controle',
+      order: 3,
+    },
+    {
+      id: '4',
+      title: 'Técnicas de Economia no Dia a Dia',
+      courseTitle: 'Gestão de Orçamento Pessoal',
+      duration: '22 min',
+      status: 'next',
+      aiReason: 'Complementa seu aprendizado de controle',
+      order: 4,
+    },
+    {
+      id: '5',
+      title: 'Planejando sua Reserva de Emergência',
+      courseTitle: 'Fundamentos do Planejamento Financeiro',
+      duration: '25 min',
+      status: 'locked',
+      aiReason: 'Próximo passo após dominar economia',
+      order: 5,
+    },
+  ];
 
   const courses: Course[] = [
     {
@@ -202,17 +260,192 @@ export default function CoursesPage({ onBack, canGoBack, onNavigateToReports }: 
       )}
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pt-20 sm:pt-24">
+        <div className="mb-8 sm:mb-12 relative overflow-hidden bg-gradient-to-br from-[#6C63FF]/30 via-purple-600/20 to-[#F2C94C]/20 backdrop-blur-sm rounded-3xl border border-purple-500/30 p-6 sm:p-8 lg:p-10 animate-fade-in">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#F2C94C]/20 rounded-full blur-3xl" />
+
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-[#6C63FF] shadow-lg">
+                <Brain className="w-7 h-7 text-white" />
+              </div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
+                    Sua Trilha 100% Personalizada
+                  </h1>
+                  <Sparkles className="w-6 h-6 text-[#F2C94C] animate-pulse" />
+                </div>
+                <p className="text-base sm:text-lg text-white/90 font-medium">
+                  A IA monta e escolhe tudo que você deve assistir, aula após aula
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
+              <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                <Zap className="w-5 h-5 text-[#F2C94C] flex-shrink-0" />
+                <span className="text-sm text-white font-medium">Sequência inteligente</span>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                <Target className="w-5 h-5 text-[#F2C94C] flex-shrink-0" />
+                <span className="text-sm text-white font-medium">Baseada no seu perfil</span>
+              </div>
+              <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
+                <Star className="w-5 h-5 text-[#F2C94C] flex-shrink-0" />
+                <span className="text-sm text-white font-medium">Atualização contínua</span>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                <span className="text-xs text-white/60 font-semibold uppercase tracking-wider">Suas Próximas Aulas</span>
+                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+              </div>
+
+              <div className="space-y-3">
+                {aiLearningPath.map((lesson, index) => {
+                  const isCompleted = lesson.status === 'completed';
+                  const isCurrent = lesson.status === 'current';
+                  const isNext = lesson.status === 'next';
+                  const isLocked = lesson.status === 'locked';
+
+                  return (
+                    <div
+                      key={lesson.id}
+                      className={`relative group transition-all duration-300 ${
+                        isLocked ? 'opacity-60' : 'hover:scale-[1.02]'
+                      }`}
+                      style={{ animationDelay: `${index * 100}ms` }}
+                    >
+                      <div
+                        className={`relative p-4 sm:p-5 rounded-xl border transition-all duration-300 ${
+                          isCurrent
+                            ? 'bg-gradient-to-r from-[#F2C94C]/20 to-purple-500/20 border-[#F2C94C] shadow-lg shadow-[#F2C94C]/20'
+                            : isCompleted
+                            ? 'bg-white/5 border-green-500/30 backdrop-blur-sm'
+                            : isNext
+                            ? 'bg-white/5 border-purple-500/30 backdrop-blur-sm'
+                            : 'bg-white/5 border-white/10 backdrop-blur-sm'
+                        }`}
+                      >
+                        <div className="flex items-center gap-4">
+                          <div
+                            className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-all duration-300 ${
+                              isCurrent
+                                ? 'bg-[#F2C94C] text-[#003366] shadow-lg'
+                                : isCompleted
+                                ? 'bg-green-500/30 text-green-400 border border-green-500/50'
+                                : isNext
+                                ? 'bg-purple-500/30 text-purple-300 border border-purple-500/50'
+                                : 'bg-white/10 text-white/40'
+                            }`}
+                          >
+                            {isCompleted ? (
+                              <CheckCircle2 className="w-6 h-6" />
+                            ) : isLocked ? (
+                              <Lock className="w-6 h-6" />
+                            ) : (
+                              <span>{lesson.order}</span>
+                            )}
+                          </div>
+
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-start justify-between gap-2 mb-1">
+                              <h3 className={`text-base sm:text-lg font-bold leading-tight ${
+                                isCurrent ? 'text-white' : isCompleted ? 'text-white/80' : 'text-white/90'
+                              }`}>
+                                {lesson.title}
+                              </h3>
+                              {isCurrent && (
+                                <span className="flex-shrink-0 px-2 py-1 bg-[#F2C94C] text-[#003366] text-xs font-bold rounded-full animate-pulse">
+                                  AGORA
+                                </span>
+                              )}
+                              {isNext && (
+                                <span className="flex-shrink-0 px-2 py-1 bg-purple-500/30 text-purple-300 text-xs font-bold rounded-full border border-purple-500/50">
+                                  PRÓXIMA
+                                </span>
+                              )}
+                            </div>
+
+                            <p className="text-xs sm:text-sm text-white/60 mb-2 line-clamp-1">
+                              {lesson.courseTitle}
+                            </p>
+
+                            <div className="flex items-center gap-3 text-xs text-white/70">
+                              <div className="flex items-center gap-1.5">
+                                <Clock className="w-3.5 h-3.5" />
+                                {lesson.duration}
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                <Brain className="w-3.5 h-3.5 text-purple-300" />
+                                <span className="text-purple-300">{lesson.aiReason}</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {!isLocked && (
+                            <button
+                              className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                                isCurrent
+                                  ? 'bg-white/20 hover:bg-white/30 text-white'
+                                  : isCompleted
+                                  ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400'
+                                  : 'bg-purple-500/20 hover:bg-purple-500/30 text-purple-300'
+                              }`}
+                            >
+                              {isCompleted ? (
+                                <ChevronRight className="w-5 h-5" />
+                              ) : (
+                                <Play className="w-5 h-5" />
+                              )}
+                            </button>
+                          )}
+                        </div>
+
+                        {index < aiLearningPath.length - 1 && (
+                          <div className="absolute -bottom-3 left-8 w-px h-6 bg-gradient-to-b from-white/30 to-transparent" />
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              <div className="mt-6 p-4 bg-gradient-to-r from-purple-500/20 to-[#6C63FF]/20 rounded-xl border border-purple-500/30">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-purple-500/30 flex items-center justify-center">
+                      <Brain className="w-5 h-5 text-purple-300" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-white">Trilha adaptativa</p>
+                      <p className="text-xs text-white/60">A IA ajusta conforme você evolui</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-2xl font-bold text-[#F2C94C]">40%</p>
+                    <p className="text-xs text-white/60">Concluído</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="mb-8 sm:mb-12 animate-fade-in">
           <div className="flex items-center gap-2 mb-3 sm:mb-4">
             <div className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#F2C94C]/20 text-[#F2C94C]">
               <BookOpen className="w-5 h-5 sm:w-6 sm:h-6" />
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white tracking-tight">
               Cursos Estruturados
-            </h1>
+            </h2>
           </div>
           <p className="text-base sm:text-lg text-white/80 max-w-2xl">
-            Trilhas personalizadas de aprendizado com acompanhamento inteligente de IA
+            Explore todos os cursos disponíveis e construa seu conhecimento
           </p>
         </div>
 
