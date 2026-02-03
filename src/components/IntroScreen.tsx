@@ -1,34 +1,33 @@
 import React from 'react';
 import { FormStepProps } from '../types/form';
-import { Brain } from 'lucide-react';
+import PageHeader from './PageHeader';
+import BackButton from './BackButton';
 
-const IntroScreen: React.FC<FormStepProps> = ({ onContinue }) => {
+export default function IntroScreen({ onContinue, onBack, canGoBack }: FormStepProps) {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="max-w-2xl w-full bg-white rounded-2xl shadow-xl p-8 md:p-12">
-        <div className="flex justify-center mb-8">
-          <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
-            <Brain className="w-10 h-10 text-white" strokeWidth={2} />
+    <>
+      <PageHeader />
+      <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col items-center font-inter px-6 pt-8">
+        <div className="w-full max-w-2xl">
+          <h1 className="text-3xl md:text-4xl font-funnel font-bold text-slate-900 mb-4 text-left">
+            Mentor do seu Plano
+          </h1>
+
+          <div className="prose prose-slate max-w-none mb-8 text-slate-700 leading-relaxed">
+            <p className="text-lg mb-4">
+              Responda 3 perguntas com sim ou não e veja seu plano.
+            </p>
           </div>
+
+          <button
+            onClick={() => onContinue({})}
+            className="w-full max-w-[576px] py-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-200 font-medium text-lg shadow-md hover:shadow-lg"
+          >
+            Começar
+          </button>
         </div>
-
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-slate-900 mb-4">
-          Mentor do seu Plano
-        </h1>
-
-        <p className="text-xl text-center text-slate-600 mb-12">
-          Responda 3 perguntas com sim ou não e veja seu plano.
-        </p>
-
-        <button
-          onClick={() => onContinue({})}
-          className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white text-lg font-semibold py-4 px-8 rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-[1.02]"
-        >
-          Começar
-        </button>
       </div>
-    </div>
+    </>
   );
-};
-
-export default IntroScreen;
+}

@@ -1,8 +1,10 @@
 import React from 'react';
 import { FormStepProps } from '../types/form';
+import PageHeader from './PageHeader';
+import BackButton from './BackButton';
 import { BookOpen, TrendingUp, Zap, CheckCircle2, ArrowRight } from 'lucide-react';
 
-const ActionPlan: React.FC<FormStepProps> = ({ formData }) => {
+const ActionPlan: React.FC<FormStepProps> = ({ formData, onBack, canGoBack }) => {
   const level = formData?.diagnosisLevel || 'fundamentos';
 
   const levels = {
@@ -54,8 +56,11 @@ const ActionPlan: React.FC<FormStepProps> = ({ formData }) => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-8 md:p-12">
+    <>
+      <PageHeader />
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+        <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
+        <div className="max-w-4xl w-full mx-auto bg-white rounded-2xl shadow-xl p-8 md:p-12">
         <div className="text-center mb-10">
           <div className={`inline-flex w-20 h-20 rounded-2xl bg-gradient-to-br ${currentLevel.color} items-center justify-center shadow-lg mb-6`}>
             <Icon className="w-10 h-10 text-white" strokeWidth={2} />
@@ -129,7 +134,8 @@ const ActionPlan: React.FC<FormStepProps> = ({ formData }) => {
           </p>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

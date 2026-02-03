@@ -1,6 +1,8 @@
 import { FormStep, FormData } from './types/form';
 import IntroScreen from './components/IntroScreen';
-import DiagnosisQuestions from './components/DiagnosisQuestions';
+import DiagnosisQuestion1 from './components/DiagnosisQuestion1';
+import DiagnosisQuestion2 from './components/DiagnosisQuestion2';
+import DiagnosisQuestion3 from './components/DiagnosisQuestion3';
 import DiagnosisResult from './components/DiagnosisResult';
 import ActionPlan from './components/ActionPlan';
 
@@ -9,21 +11,39 @@ export const formConfig: FormStep[] = [
     id: 'intro',
     component: IntroScreen,
     title: 'Mentor do seu Plano',
-    nextStepLogic: () => 'diagnosis'
+    nextStepLogic: () => 'question1',
+    questionNumber: 1
   },
   {
-    id: 'diagnosis',
-    component: DiagnosisQuestions,
-    title: 'Diagnóstico',
+    id: 'question1',
+    component: DiagnosisQuestion1,
+    title: 'Diagnóstico - Pergunta 1',
+    nextStepLogic: () => 'question2',
+    prevStepId: 'intro',
+    questionNumber: 1
+  },
+  {
+    id: 'question2',
+    component: DiagnosisQuestion2,
+    title: 'Diagnóstico - Pergunta 2',
+    nextStepLogic: () => 'question3',
+    prevStepId: 'question1',
+    questionNumber: 2
+  },
+  {
+    id: 'question3',
+    component: DiagnosisQuestion3,
+    title: 'Diagnóstico - Pergunta 3',
     nextStepLogic: () => 'result',
-    prevStepId: 'intro'
+    prevStepId: 'question2',
+    questionNumber: 3
   },
   {
     id: 'result',
     component: DiagnosisResult,
     title: 'Resultado',
     nextStepLogic: () => 'plan',
-    prevStepId: 'diagnosis'
+    prevStepId: 'question3'
   },
   {
     id: 'plan',
