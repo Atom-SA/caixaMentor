@@ -37,7 +37,7 @@ const ActionPlan: React.FC<FormStepProps> = ({ formData, onBack, canGoBack }) =>
 
   return (
     <>
-      <PageHeader />
+      <PageHeader transparent invertLogo />
       <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
         <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
         <div className="max-w-3xl w-full mx-auto">
