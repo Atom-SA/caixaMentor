@@ -43,23 +43,21 @@ export default function DiagnosisResult({ onContinue, onBack, canGoBack, formDat
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
         <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
         <div className="w-full max-w-2xl mx-auto">
-          <div className="text-center mb-8">
-            <div className={`inline-flex w-20 h-20 rounded-2xl bg-gradient-to-br ${currentDiagnosis.color} items-center justify-center shadow-lg mb-6`}>
-              <Icon className="w-10 h-10 text-white" strokeWidth={2} />
+          <div className="text-center">
+            <div className={`inline-flex w-24 h-24 rounded-full bg-gradient-to-br ${currentDiagnosis.color} items-center justify-center shadow-lg mb-8`}>
+              <Icon className="w-12 h-12 text-white" strokeWidth={2} />
             </div>
 
-            <h1 className="text-3xl md:text-4xl font-funnel font-bold text-slate-900 mb-2">
+            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 mb-3 tracking-tight">
               {currentDiagnosis.title}
             </h1>
-            <p className="text-lg text-slate-600 mb-6">
+            <p className="text-xl text-slate-600 mb-8">
               {currentDiagnosis.subtitle}
             </p>
 
-            <div className="bg-white rounded-lg shadow-md p-6 mb-8 border border-gray-200">
-              <p className="text-xl text-slate-800 font-medium">
-                {currentDiagnosis.message}
-              </p>
-            </div>
+            <p className="text-2xl text-slate-800 font-medium leading-relaxed mb-16">
+              {currentDiagnosis.message}
+            </p>
           </div>
         </div>
 
@@ -67,7 +65,7 @@ export default function DiagnosisResult({ onContinue, onBack, canGoBack, formDat
           <div className="w-full max-w-[576px] mx-auto">
             <button
               onClick={() => onContinue({})}
-              className="w-full py-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-200 font-medium text-lg shadow-md hover:shadow-lg"
+              className="w-full py-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-200 font-medium text-lg shadow-md hover:shadow-lg active:scale-95"
             >
               Ver meu plano
             </button>
