@@ -9,8 +9,8 @@ export default {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        accent: '#003366',
-        primary: '#003366',
+        accent: '#0960ae',
+        primary: '#0052FF',
       },
       accentColor: {
         DEFAULT: '#003366',
