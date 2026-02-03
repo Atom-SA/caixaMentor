@@ -10,7 +10,7 @@ export const formConfig: FormStep[] = [
   {
     id: 'intro',
     component: IntroScreen,
-    title: 'Mentor do seu Plano',
+    title: 'Mentor do seu novo Plano',
     nextStepLogic: () => 'question1',
     questionNumber: 1
   },
