@@ -11,7 +11,7 @@ export default function IntroScreen({ onContinue, onBack, canGoBack }: FormStepP
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex flex-col items-center font-inter px-6 pt-8">
         <div className="w-full max-w-2xl">
           <h1 className="text-3xl md:text-4xl font-funnel font-bold text-slate-900 mb-4 text-left">
-            Mentor do seu Plano
+            Mentor do seu novo Plano
           </h1>
 
           <div className="prose prose-slate max-w-none mb-8 text-slate-700 leading-relaxed">
