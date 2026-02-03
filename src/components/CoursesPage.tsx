@@ -405,6 +405,9 @@ export default function CoursesPage({ onBack, canGoBack, onNavigateToReports }: 
 
                           {!isLocked && (
                             <button
+                              onClick={() => {
+                                window.location.hash = '/player';
+                              }}
                               className={`flex-shrink-0 w-9 h-9 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg ${
                                 isCurrent
                                   ? 'bg-gradient-to-br from-[#F2C94C] to-[#F2994A] text-[#003366] hover:scale-110'
@@ -604,6 +607,11 @@ export default function CoursesPage({ onBack, canGoBack, onNavigateToReports }: 
 
                     <button
                       disabled={course.locked}
+                      onClick={() => {
+                        if (!course.locked) {
+                          window.location.hash = '/player';
+                        }
+                      }}
                       className={`w-full flex items-center justify-center gap-2 py-2.5 sm:py-3 rounded-xl font-semibold text-sm transition-all duration-300 ${
                         course.locked
                           ? 'bg-white/5 text-white/40 cursor-not-allowed'
