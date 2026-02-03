@@ -9,7 +9,7 @@ export default {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        accent: '#0960ae',
+        accent: '#003366',
         primary: '#0052FF',
       },
       accentColor: {
