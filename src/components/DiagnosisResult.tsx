@@ -33,7 +33,6 @@ export default function DiagnosisResult({ onContinue, onBack, canGoBack, formDat
 
   return (
     <>
-      <PageHeader transparent invertLogo />
       <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
         <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
         <div className="w-full max-w-2xl mx-auto">
