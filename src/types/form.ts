@@ -1,4 +1,9 @@
 export interface FormData {
+  // Nova jornada - Diagnóstico
+  knowsMonthlyBalance?: boolean | null;
+  investsMonthly?: boolean | null;
+  diagnosisLevel?: 'fundamentos' | 'patrimonio' | 'otimizacao';
+
   // Identificação
   email?: string;
   phone?: string;
@@ -16,7 +21,7 @@ export interface FormData {
   mainIncomeSourceOther?: string;
   workRegime?: string;
   mainIncomeAmount?: number;
-  
+
   // Renda secundária
   secondaryIncomeSources?: string[];
   hasSecondaryIncome?: string;
@@ -28,14 +33,14 @@ export interface FormData {
   incomeVariability?: string;
   incomeVariabilityDetails?: string;
   hasPassiveIncome?: string;
-  passiveIncomeSources?: string[]; // ⚙️ array como no banco
+  passiveIncomeSources?: string[];
   otherIncomeValue?: string;
   passiveIncomeValue?: string;
   otherIncome?: string;
 
   // Controle e despesas
   hasExpenseControl?: string;
-  updateFrequency?: string; // ⚙️ adicionado (já existe no banco)
+  updateFrequency?: string;
   monthlyExpenses?: string;
   surplusAction?: string;
   deficitAction?: string;
@@ -49,11 +54,11 @@ export interface FormData {
   triedRenegotiation?: string;
 
   // Patrimônio e investimentos
-  hasEmergencyFund?: string;
+  hasEmergencyFund?: string | boolean | null;
   emergencyFundMonths?: string;
-  emergencyFundLocation?: string[]; // ⚙️ agora array
+  emergencyFundLocation?: string[];
   alreadyInvests?: string;
-  investmentTypes?: string[]; // ⚙️ agora array
+  investmentTypes?: string[];
   monthlyInvestment?: number;
   totalInvested?: number;
   investmentGoal?: string;
@@ -68,24 +73,23 @@ export interface FormData {
   hasProperty?: string;
   propertyDetails?: string;
   otherAssets?: string;
-  hasVehicleInsurance: 'Sim' | 'Não' | ''
-  vehicleInsurancePremium: string
-  hasPropertyInsurance: 'Sim' | 'Não' | ''
-  propertyInsurancePremium: string
-  hasLifeInsurance: 'Sim' | 'Não' | ''
-  lifeInsuranceCompany: string
-  lifeInsurancePremium: string
-  
+  hasVehicleInsurance?: 'Sim' | 'Não' | '';
+  vehicleInsurancePremium?: string;
+  hasPropertyInsurance?: 'Sim' | 'Não' | '';
+  propertyInsurancePremium?: string;
+  hasLifeInsurance?: 'Sim' | 'Não' | '';
+  lifeInsuranceCompany?: string;
+  lifeInsurancePremium?: string;
+
   // Metas e objetivos
   goals12Months?: string;
   goals5Years?: string;
   topPriority?: string;
   goalImpact?: string;
   changeCommitment?: string;
-  goalsOtherText?: string
-  investsMonthly: 'Sim' | 'Não'
-  averageMonthlyInvestment?: number
-  goalsSelection: string[]
+  goalsOtherText?: string;
+  averageMonthlyInvestment?: number;
+  goalsSelection?: string[];
   consultingGoals?: string[];
   successDefinition?: string;
 
