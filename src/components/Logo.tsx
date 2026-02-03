@@ -6,6 +6,10 @@ interface LogoProps {
 }
 
 export default function Logo({ invert = false, height = 'h-8' }: LogoProps) {
+  const caixaLogo = invert
+    ? 'https://www.caixa.gov.br/PublishingImages/nova-home/icones/x-volume-negativa-54.png'
+    : 'https://www.caixa.gov.br/PublishingImages/nova-home/icones/x-volume-positiva-54-v2.png';
+
   return (
     <div className="flex items-center justify-center gap-3">
       <img
@@ -15,9 +19,9 @@ export default function Logo({ invert = false, height = 'h-8' }: LogoProps) {
       />
       <span className={`text-2xl font-bold ${invert ? 'text-white' : 'text-gray-800'}`}>+</span>
       <img
-        src="https://www.caixa.gov.br/PublishingImages/nova-home/icones/x-volume-negativa-54.png"
+        src={caixaLogo}
         alt="Caixa"
-        className={`${height} w-auto object-contain ${invert ? 'brightness-0 invert' : ''}`}
+        className={`${height} w-auto object-contain`}
       />
     </div>
   );

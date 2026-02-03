@@ -16,10 +16,13 @@ export default function ResultsPage({ formData, finalPrice }: ResultsPageProps) 
 
   return (
     <div className="min-h-screen bg-[#003366] font-inter">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="mb-16">
-          <Logo invert height="h-6" />
+      <div className="fixed top-0 left-0 right-0 bg-[#003366] z-50 border-b border-white/10">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <Logo invert height="h-5" />
         </div>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-6 py-12 pt-24">
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
           {/* Left Section - Content */}
