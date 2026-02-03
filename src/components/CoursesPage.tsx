@@ -48,6 +48,7 @@ interface AILesson {
 export default function CoursesPage({ onBack, canGoBack, onNavigateToReports }: CoursesPageProps) {
   const [activeTab, setActiveTab] = useState<'all' | 'in-progress' | 'completed'>('all');
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showAIPath, setShowAIPath] = useState(false);
 
   const aiLearningPath: AILesson[] = [
     {
@@ -259,49 +260,68 @@ export default function CoursesPage({ onBack, canGoBack, onNavigateToReports }: 
         </div>
       )}
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pt-20 sm:pt-24">
-        <div className="mb-8 sm:mb-12 relative overflow-hidden bg-gradient-to-br from-[#6C63FF]/30 via-purple-600/20 to-[#F2C94C]/20 backdrop-blur-sm rounded-3xl border border-purple-500/30 p-6 sm:p-8 lg:p-10 animate-fade-in">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-purple-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-[#F2C94C]/20 rounded-full blur-3xl" />
+      {showAIPath && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in" onClick={() => setShowAIPath(false)}>
+          <div className="relative w-full max-w-4xl max-h-[90vh] bg-gradient-to-br from-[#003366] to-[#002244] rounded-3xl shadow-2xl overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#00D4FF] via-[#F2C94C] to-[#27AE60]" />
 
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-[#6C63FF] shadow-lg">
-                <Brain className="w-7 h-7 text-white" />
-              </div>
-              <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white tracking-tight">
-                    Sua Trilha 100% Personalizada
-                  </h1>
-                  <Sparkles className="w-6 h-6 text-[#F2C94C] animate-pulse" />
+            <div className="relative p-6 sm:p-8 max-h-[90vh] overflow-y-auto">
+              <button
+                onClick={() => setShowAIPath(false)}
+                className="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 text-white transition-all"
+              >
+                ✕
+              </button>
+
+              <div className="mb-8">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00D4FF] to-[#0096FF] flex items-center justify-center shadow-lg shadow-[#00D4FF]/30">
+                    <Brain className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h2 className="text-3xl sm:text-4xl font-bold text-white mb-2">
+                      Sua Trilha 100% Personalizada
+                    </h2>
+                    <p className="text-white/80 text-base sm:text-lg">
+                      A IA monta e escolhe tudo que você deve assistir, aula após aula
+                    </p>
+                  </div>
                 </div>
-                <p className="text-base sm:text-lg text-white/90 font-medium">
-                  A IA monta e escolhe tudo que você deve assistir, aula após aula
-                </p>
-              </div>
-            </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6">
-              <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                <Zap className="w-5 h-5 text-[#F2C94C] flex-shrink-0" />
-                <span className="text-sm text-white font-medium">Sequência inteligente</span>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                <Target className="w-5 h-5 text-[#F2C94C] flex-shrink-0" />
-                <span className="text-sm text-white font-medium">Baseada no seu perfil</span>
-              </div>
-              <div className="flex items-center gap-3 p-3 bg-white/10 backdrop-blur-sm rounded-xl border border-white/20">
-                <Star className="w-5 h-5 text-[#F2C94C] flex-shrink-0" />
-                <span className="text-sm text-white font-medium">Atualização contínua</span>
-              </div>
-            </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                  <div className="flex items-center gap-2 p-3 bg-gradient-to-r from-[#00D4FF]/20 to-[#0096FF]/20 rounded-xl border border-[#00D4FF]/30">
+                    <Zap className="w-5 h-5 text-[#00D4FF] flex-shrink-0" />
+                    <span className="text-sm text-white font-medium">Sequência inteligente</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-gradient-to-r from-[#F2C94C]/20 to-[#F2994A]/20 rounded-xl border border-[#F2C94C]/30">
+                    <Target className="w-5 h-5 text-[#F2C94C] flex-shrink-0" />
+                    <span className="text-sm text-white font-medium">Baseada no seu perfil</span>
+                  </div>
+                  <div className="flex items-center gap-2 p-3 bg-gradient-to-r from-[#27AE60]/20 to-[#219653]/20 rounded-xl border border-[#27AE60]/30">
+                    <Star className="w-5 h-5 text-[#27AE60] flex-shrink-0" />
+                    <span className="text-sm text-white font-medium">Atualização contínua</span>
+                  </div>
+                </div>
 
-            <div className="relative">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                <span className="text-xs text-white/60 font-semibold uppercase tracking-wider">Suas Próximas Aulas</span>
-                <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                <div className="p-4 bg-gradient-to-r from-[#00D4FF]/10 to-[#27AE60]/10 rounded-xl border border-white/20">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#00D4FF] to-[#27AE60] flex items-center justify-center shadow-lg">
+                        <BarChart3 className="w-6 h-6 text-white" />
+                      </div>
+                      <div>
+                        <p className="text-base font-bold text-white">Seu Progresso</p>
+                        <p className="text-xs text-white/70">2 de 5 aulas concluídas</p>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-3xl font-bold text-[#F2C94C]">40%</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 h-2 bg-white/10 rounded-full overflow-hidden">
+                    <div className="h-full bg-gradient-to-r from-[#00D4FF] to-[#27AE60] rounded-full transition-all duration-500" style={{ width: '40%' }} />
+                  </div>
+                </div>
               </div>
 
               <div className="space-y-3">
@@ -315,122 +335,147 @@ export default function CoursesPage({ onBack, canGoBack, onNavigateToReports }: 
                     <div
                       key={lesson.id}
                       className={`relative group transition-all duration-300 ${
-                        isLocked ? 'opacity-60' : 'hover:scale-[1.02]'
+                        isLocked ? 'opacity-60' : 'hover:scale-[1.01]'
                       }`}
-                      style={{ animationDelay: `${index * 100}ms` }}
                     >
                       <div
-                        className={`relative p-4 sm:p-5 rounded-xl border transition-all duration-300 ${
+                        className={`relative p-5 rounded-2xl border transition-all duration-300 ${
                           isCurrent
-                            ? 'bg-gradient-to-r from-[#F2C94C]/20 to-purple-500/20 border-[#F2C94C] shadow-lg shadow-[#F2C94C]/20'
+                            ? 'bg-gradient-to-r from-[#F2C94C]/20 to-[#00D4FF]/20 border-[#F2C94C] shadow-lg shadow-[#F2C94C]/20'
                             : isCompleted
-                            ? 'bg-white/5 border-green-500/30 backdrop-blur-sm'
+                            ? 'bg-gradient-to-r from-[#27AE60]/10 to-[#219653]/10 border-[#27AE60]/30'
                             : isNext
-                            ? 'bg-white/5 border-purple-500/30 backdrop-blur-sm'
-                            : 'bg-white/5 border-white/10 backdrop-blur-sm'
+                            ? 'bg-gradient-to-r from-[#00D4FF]/10 to-[#0096FF]/10 border-[#00D4FF]/30'
+                            : 'bg-white/5 border-white/10'
                         }`}
                       >
                         <div className="flex items-center gap-4">
                           <div
-                            className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center font-bold text-lg transition-all duration-300 ${
+                            className={`flex-shrink-0 w-14 h-14 rounded-xl flex items-center justify-center font-bold text-xl transition-all duration-300 ${
                               isCurrent
-                                ? 'bg-[#F2C94C] text-[#003366] shadow-lg'
+                                ? 'bg-gradient-to-br from-[#F2C94C] to-[#F2994A] text-[#003366] shadow-lg shadow-[#F2C94C]/30'
                                 : isCompleted
-                                ? 'bg-green-500/30 text-green-400 border border-green-500/50'
+                                ? 'bg-gradient-to-br from-[#27AE60] to-[#219653] text-white shadow-lg'
                                 : isNext
-                                ? 'bg-purple-500/30 text-purple-300 border border-purple-500/50'
+                                ? 'bg-gradient-to-br from-[#00D4FF] to-[#0096FF] text-white shadow-lg'
                                 : 'bg-white/10 text-white/40'
                             }`}
                           >
                             {isCompleted ? (
-                              <CheckCircle2 className="w-6 h-6" />
+                              <CheckCircle2 className="w-7 h-7" />
                             ) : isLocked ? (
-                              <Lock className="w-6 h-6" />
+                              <Lock className="w-7 h-7" />
                             ) : (
                               <span>{lesson.order}</span>
                             )}
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <div className="flex items-start justify-between gap-2 mb-1">
-                              <h3 className={`text-base sm:text-lg font-bold leading-tight ${
-                                isCurrent ? 'text-white' : isCompleted ? 'text-white/80' : 'text-white/90'
-                              }`}>
+                            <div className="flex items-start justify-between gap-2 mb-2">
+                              <h3 className="text-lg font-bold text-white leading-tight">
                                 {lesson.title}
                               </h3>
                               {isCurrent && (
-                                <span className="flex-shrink-0 px-2 py-1 bg-[#F2C94C] text-[#003366] text-xs font-bold rounded-full animate-pulse">
-                                  AGORA
+                                <span className="flex-shrink-0 px-3 py-1 bg-[#F2C94C] text-[#003366] text-xs font-bold rounded-full shadow-lg animate-pulse">
+                                  ATUAL
                                 </span>
                               )}
                               {isNext && (
-                                <span className="flex-shrink-0 px-2 py-1 bg-purple-500/30 text-purple-300 text-xs font-bold rounded-full border border-purple-500/50">
+                                <span className="flex-shrink-0 px-3 py-1 bg-[#00D4FF]/30 text-[#00D4FF] text-xs font-bold rounded-full border border-[#00D4FF]/50">
                                   PRÓXIMA
                                 </span>
                               )}
                             </div>
 
-                            <p className="text-xs sm:text-sm text-white/60 mb-2 line-clamp-1">
+                            <p className="text-sm text-white/70 mb-3">
                               {lesson.courseTitle}
                             </p>
 
-                            <div className="flex items-center gap-3 text-xs text-white/70">
-                              <div className="flex items-center gap-1.5">
-                                <Clock className="w-3.5 h-3.5" />
+                            <div className="flex items-center gap-4 text-sm">
+                              <div className="flex items-center gap-1.5 text-white/60">
+                                <Clock className="w-4 h-4" />
                                 {lesson.duration}
                               </div>
-                              <div className="flex items-center gap-1.5">
-                                <Brain className="w-3.5 h-3.5 text-purple-300" />
-                                <span className="text-purple-300">{lesson.aiReason}</span>
+                              <div className="flex items-center gap-1.5 text-[#00D4FF]">
+                                <Brain className="w-4 h-4" />
+                                <span>{lesson.aiReason}</span>
                               </div>
                             </div>
                           </div>
 
                           {!isLocked && (
                             <button
-                              className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                              className={`flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-300 shadow-lg ${
                                 isCurrent
-                                  ? 'bg-white/20 hover:bg-white/30 text-white'
+                                  ? 'bg-gradient-to-br from-[#F2C94C] to-[#F2994A] text-[#003366] hover:scale-110'
                                   : isCompleted
-                                  ? 'bg-green-500/20 hover:bg-green-500/30 text-green-400'
-                                  : 'bg-purple-500/20 hover:bg-purple-500/30 text-purple-300'
+                                  ? 'bg-gradient-to-br from-[#27AE60] to-[#219653] text-white hover:scale-110'
+                                  : 'bg-gradient-to-br from-[#00D4FF] to-[#0096FF] text-white hover:scale-110'
                               }`}
                             >
                               {isCompleted ? (
-                                <ChevronRight className="w-5 h-5" />
+                                <ChevronRight className="w-6 h-6" />
                               ) : (
-                                <Play className="w-5 h-5" />
+                                <Play className="w-6 h-6" />
                               )}
                             </button>
                           )}
                         </div>
 
                         {index < aiLearningPath.length - 1 && (
-                          <div className="absolute -bottom-3 left-8 w-px h-6 bg-gradient-to-b from-white/30 to-transparent" />
+                          <div className="absolute -bottom-3 left-9 w-px h-6 bg-gradient-to-b from-white/30 to-transparent" />
                         )}
                       </div>
                     </div>
                   );
                 })}
               </div>
+            </div>
+          </div>
+        </div>
+      )}
 
-              <div className="mt-6 p-4 bg-gradient-to-r from-purple-500/20 to-[#6C63FF]/20 rounded-xl border border-purple-500/30">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-purple-500/30 flex items-center justify-center">
-                      <Brain className="w-5 h-5 text-purple-300" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-8 pt-20 sm:pt-24">
+        <div
+          onClick={() => setShowAIPath(true)}
+          className="mb-8 relative overflow-hidden bg-gradient-to-r from-[#00D4FF]/20 via-[#F2C94C]/20 to-[#27AE60]/20 backdrop-blur-sm rounded-2xl border border-[#00D4FF]/30 p-6 cursor-pointer hover:scale-[1.02] transition-all duration-300 group animate-fade-in shadow-lg hover:shadow-2xl hover:shadow-[#00D4FF]/20"
+        >
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-[#00D4FF] via-[#F2C94C] to-[#27AE60]" />
+
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4 flex-1">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-gradient-to-br from-[#00D4FF] to-[#0096FF] flex items-center justify-center shadow-lg shadow-[#00D4FF]/30 group-hover:scale-110 transition-transform">
+                <Brain className="w-7 h-7 sm:w-8 sm:h-8 text-white" />
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-1">
+                  <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
+                    Sua Trilha 100% Personalizada
+                  </h2>
+                  <Sparkles className="w-5 h-5 text-[#F2C94C] animate-pulse" />
+                </div>
+                <p className="text-sm sm:text-base text-white/80">
+                  A IA monta e escolhe tudo que você deve assistir, aula após aula
+                </p>
+
+                <div className="flex items-center gap-4 mt-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-24 sm:w-32 h-2 bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full bg-gradient-to-r from-[#00D4FF] to-[#27AE60] rounded-full" style={{ width: '40%' }} />
                     </div>
-                    <div>
-                      <p className="text-sm font-semibold text-white">Trilha adaptativa</p>
-                      <p className="text-xs text-white/60">A IA ajusta conforme você evolui</p>
-                    </div>
+                    <span className="text-sm font-bold text-[#F2C94C]">40%</span>
                   </div>
-                  <div className="text-right">
-                    <p className="text-2xl font-bold text-[#F2C94C]">40%</p>
-                    <p className="text-xs text-white/60">Concluído</p>
-                  </div>
+                  <span className="text-xs sm:text-sm text-white/60">2 de 5 aulas concluídas</span>
                 </div>
               </div>
+            </div>
+
+            <div className="flex-shrink-0">
+              <button className="px-6 py-3 bg-gradient-to-r from-[#F2C94C] to-[#F2994A] text-[#003366] rounded-xl font-bold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-110 flex items-center gap-2">
+                Ver Trilha
+                <ArrowRight className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
