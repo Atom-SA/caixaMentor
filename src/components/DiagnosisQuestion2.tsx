@@ -76,7 +76,7 @@ export default function DiagnosisQuestion2({ onContinue, onBack, canGoBack, form
               disabled={answer === null}
               className={`w-full py-4 text-white rounded-full transition-colors duration-200 font-medium text-lg shadow-md ${
                 answer !== null
-                  ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg cursor-pointer'
+                  ? 'bg-[#003366] hover:bg-[#003366]/90 hover:shadow-lg cursor-pointer active:scale-95'
                   : 'bg-black cursor-not-allowed'
               }`}
             >

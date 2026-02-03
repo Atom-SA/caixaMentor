@@ -65,7 +65,7 @@ export default function DiagnosisResult({ onContinue, onBack, canGoBack, formDat
           <div className="w-full max-w-[576px] mx-auto">
             <button
               onClick={() => onContinue({})}
-              className="w-full py-4 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-all duration-200 font-medium text-lg shadow-md hover:shadow-lg active:scale-95"
+              className="w-full py-4 bg-[#003366] text-white rounded-full hover:bg-[#003366]/90 transition-all duration-200 font-medium text-lg shadow-md hover:shadow-lg active:scale-95"
             >
               Ver meu plano
             </button>
