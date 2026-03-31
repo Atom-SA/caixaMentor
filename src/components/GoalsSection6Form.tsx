@@ -71,15 +71,15 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-white mb-2">
             Objetivos e Prioridades
           </h2>
-          <p className="text-gray-600">
+          <p className="text-white/60">
             Aqui vamos alinhar o planejamento ao que realmente importa pra você: seus sonhos e metas financeiras.
           </p>
         </div>
@@ -87,33 +87,33 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* NOVA ÁREA: Objetivos (checkbox) */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Selecione seus objetivos financeiros principais
             </label>
             <div className="space-y-3">
               {(['Viagem', 'Casa própria', 'Novo carro', 'Reserva de emergência', 'Aposentadoria', 'Segurança', 'Renda Passiva', 'Outros'] as GoalOption[]).map((opt) => (
-                <label key={opt} className="flex items-start p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <label key={opt} className="flex items-start p-4 border border-white/20 rounded-lg cursor-pointer hover:bg-white/5 transition-colors">
                   <input
                     type="checkbox"
-                    className="mt-1 w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    className="mt-1 w-4 h-4 text-[#F2C94C] focus:ring-[#F2C94C]"
                     checked={goalsSelection.includes(opt)}
                     onChange={() => toggleGoal(opt)}
                   />
-                  <span className="ml-3 text-gray-900">{opt}</span>
+                  <span className="ml-3 text-white">{opt}</span>
                 </label>
               ))}
             </div>
 
             {goalsSelection.includes('Outros') && (
               <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white/80 mb-2">
                   Descreva outros objetivos
                 </label>
                 <input
                   type="text"
                   value={goalsOtherText}
                   onChange={(e) => setGoalsOtherText(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
                   placeholder="Ex: viagem específica, curso, reforma, negócios, etc."
                 />
               </div>
@@ -122,13 +122,13 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
 
           {/* CAMPOS ORIGINAIS mantidos */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-3">
+            <label className="block text-lg font-medium text-white mb-3">
               Quais são seus principais objetivos financeiros para os próximos 12 meses?
             </label>
             <textarea
               value={goals12Months}
               onChange={(e) => setGoals12Months(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
               rows={4}
               placeholder="Ex: Pagar dívidas, criar reserva de emergência, comprar um carro..."
               required
@@ -136,13 +136,13 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
           </div>
 
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-3">
+            <label className="block text-lg font-medium text-white mb-3">
               E para os próximos 5 anos?
             </label>
             <textarea
               value={goals5Years}
               onChange={(e) => setGoals5Years(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
               rows={4}
               placeholder="Ex: Comprar imóvel, trocar de carro, viajar para o exterior, aposentadoria..."
               required
@@ -150,27 +150,27 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
           </div>
 
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-3">
+            <label className="block text-lg font-medium text-white mb-3">
               Entre esses, qual é sua prioridade número 1 no momento?
             </label>
             <input
               type="text"
               value={topPriority}
               onChange={(e) => setTopPriority(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
               placeholder="Seu objetivo mais importante"
               required
             />
           </div>
 
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-3">
+            <label className="block text-lg font-medium text-white mb-3">
               Qual seria o impacto positivo em sua vida se atingisse esse objetivo?
             </label>
             <textarea
               value={goalImpact}
               onChange={(e) => setGoalImpact(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
               rows={4}
               placeholder="Descreva como sua vida mudaria ao alcançar esse objetivo..."
               required
@@ -178,7 +178,7 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
           </div>
 
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Você está disposto(a) a mudar hábitos para alcançá-lo?
             </label>
             <div className="space-y-3">
@@ -191,7 +191,7 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
               ].map((option) => (
                 <label
                   key={option}
-                  className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  className="flex items-center p-4 border border-white/20 rounded-lg cursor-pointer hover:bg-white/5 transition-colors"
                 >
                   <input
                     type="radio"
@@ -199,9 +199,9 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
                     value={option}
                     checked={changeCommitment === option}
                     onChange={(e) => setChangeCommitment(e.target.value)}
-                    className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    className="w-4 h-4 text-[#F2C94C] focus:ring-[#F2C94C]"
                   />
-                  <span className="ml-3 text-gray-900">{option}</span>
+                  <span className="ml-3 text-white">{option}</span>
                 </label>
               ))}
             </div>
@@ -209,28 +209,28 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
 
           {/* NOVA PERGUNTA: Hábito de investir + valor médio condicional */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Tem o hábito de investir mensalmente?
             </label>
             <div className="flex gap-4">
               {(['Sim', 'Não'] as InvestsMonthly[]).map((opt) => (
-                <label key={opt} className="flex items-center p-3 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
+                <label key={opt} className="flex items-center p-3 border border-white/20 rounded-lg cursor-pointer hover:bg-white/5 transition-colors">
                   <input
                     type="radio"
                     name="investsMonthly"
                     value={opt}
                     checked={investsMonthly === opt}
                     onChange={(e) => setInvestsMonthly(e.target.value as InvestsMonthly)}
-                    className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    className="w-4 h-4 text-[#F2C94C] focus:ring-[#F2C94C]"
                   />
-                  <span className="ml-2 text-gray-900">{opt}</span>
+                  <span className="ml-2 text-white">{opt}</span>
                 </label>
               ))}
             </div>
 
             {investsMonthly === 'Sim' && (
               <div className="mt-4">
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium text-white/80 mb-2">
                   Valor médio mensal (R$)
                 </label>
                 <input
@@ -240,11 +240,11 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
                   inputMode="decimal"
                   value={averageMonthlyInvestment}
                   onChange={(e) => setAverageMonthlyInvestment(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
                   placeholder="Ex: 300, 500, 1000"
                   // intencionalmente SEM required — pedido do cliente
                 />
-                <p className="text-xs text-gray-500 mt-1">Se não souber o valor exato, pode deixar em branco.</p>
+                <p className="text-xs text-white/50 mt-1">Se não souber o valor exato, pode deixar em branco.</p>
               </div>
             )}
           </div>
@@ -255,8 +255,8 @@ export default function GoalsSection6Form({ onContinue, onBack, canGoBack, formD
               disabled={!canSubmit}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 canSubmit
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Continuar

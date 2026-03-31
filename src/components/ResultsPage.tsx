@@ -9,17 +9,18 @@ interface ResultsPageProps {
   onBack: () => void;
   canGoBack?: boolean;
   finalPrice?: string;
+  onStartCaixaEduca?: () => void;
 }
 
-export default function ResultsPage({ formData, onBack, canGoBack, finalPrice }: ResultsPageProps) {
+export default function ResultsPage({ formData, onBack, canGoBack, finalPrice, onStartCaixaEduca }: ResultsPageProps) {
   const handleComprar = () => {
     window.location.href = '#';
   };
 
   return (
-    <div className="min-h-screen bg-[#003366] font-inter">
+    <div className="min-h-screen bg-navy font-inter">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} lightMode />
-      <div className="fixed top-0 left-0 right-0 bg-[#003366] z-50">
+      <div className="fixed top-0 left-0 right-0 bg-navy/95 backdrop-blur-xl z-50 border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-6 py-4">
           <Logo invert height="h-5" brightness="10" />
         </div>
@@ -91,7 +92,7 @@ export default function ResultsPage({ formData, onBack, canGoBack, finalPrice }:
 
                   <button
                     onClick={handleComprar}
-                    className="w-full mt-6 sm:mt-8 bg-[#F2C94C] hover:bg-[#E5BD43] text-[#003366] font-bold py-3.5 sm:py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg text-sm sm:text-base"
+                    className="w-full mt-6 sm:mt-8 bg-accent hover:brightness-110 text-navy font-bold py-3.5 sm:py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 active:scale-95 shadow-lg shadow-accent/20 text-sm sm:text-base"
                   >
                     Comprar Agora
                   </button>
@@ -101,6 +102,19 @@ export default function ResultsPage({ formData, onBack, canGoBack, finalPrice }:
                   </p>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* CTA - Caixa Educa */}
+          {onStartCaixaEduca && (
+            <div className="lg:col-span-2 animate-fade-in">
+              <button
+                onClick={onStartCaixaEduca}
+                className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-4 bg-white/5 hover:bg-white/10 text-white rounded-xl font-semibold text-base transition-all border border-white/10 hover:border-accent/30"
+              >
+                Entrar no Caixa Educa
+                <span className="text-accent">→</span>
+              </button>
             </div>
           )}
         </div>

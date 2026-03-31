@@ -43,16 +43,16 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">Patrimônio e Investimentos</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">Patrimônio e Investimentos</h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 20 */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Você possui reserva de emergência?
             </label>
             <div className="flex gap-4">
@@ -60,7 +60,7 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
                 <label
                   key={option}
                   className={`flex-1 text-center p-4 border rounded-lg cursor-pointer transition-colors ${
-                    hasEmergencyFund === option ? 'border-accent bg-blue-50' : 'border-gray-300 hover:bg-gray-50'
+                    hasEmergencyFund === option ? 'border-accent bg-blue-50' : 'border-white/20 hover:bg-white/5'
                   }`}
                 >
                   <input
@@ -71,7 +71,7 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
                     onChange={(e) => setHasEmergencyFund(e.target.value)}
                     className="hidden"
                   />
-                  <span className="capitalize text-gray-900">{option}</span>
+                  <span className="capitalize text-white">{option}</span>
                 </label>
               ))}
             </div>
@@ -81,7 +81,7 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
           {hasEmergencyFund === 'Sim' && (
             <>
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-4">
+                <label className="block text-lg font-medium text-white mb-4">
                   Ela cobre quantos meses dos seus gastos?
                 </label>
                 <div className="space-y-3">
@@ -89,7 +89,7 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
                     <label
                       key={opt}
                       className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
-                        emergencyFundMonths === opt ? 'border-accent bg-blue-50' : 'border-gray-300 hover:bg-gray-50'
+                        emergencyFundMonths === opt ? 'border-accent bg-blue-50' : 'border-white/20 hover:bg-white/5'
                       }`}
                     >
                       <input
@@ -100,14 +100,14 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
                         onChange={(e) => setemergencyFundMonths(e.target.value)}
                         className="w-4 h-4 text-accent focus:ring-accent"
                       />
-                      <span className="ml-3 text-gray-900">{opt}</span>
+                      <span className="ml-3 text-white">{opt}</span>
                     </label>
                   ))}
                 </div>
               </div>
 
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-4">
+                <label className="block text-lg font-medium text-white mb-4">
                   Onde essa reserva está aplicada?
                 </label>
                 <div className="space-y-3">
@@ -115,7 +115,7 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
                     <label
                       key={opt}
                       className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
-                        emergencyFundLocation.includes(opt) ? 'border-accent bg-blue-50' : 'border-gray-300 hover:bg-gray-50'
+                        emergencyFundLocation.includes(opt) ? 'border-accent bg-blue-50' : 'border-white/20 hover:bg-white/5'
                       }`}
                     >
                       <input
@@ -131,7 +131,7 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
                         }
                         className="w-4 h-4 text-accent focus:ring-accent"
                       />
-                      <span className="ml-3 text-gray-900">{opt}</span>
+                      <span className="ml-3 text-white">{opt}</span>
                     </label>
                   ))}
                 </div>
@@ -145,8 +145,8 @@ export default function PatrimonyEmergencyFundForm({ onContinue, onBack, canGoBa
               disabled={!isValid}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 isValid
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Continuar

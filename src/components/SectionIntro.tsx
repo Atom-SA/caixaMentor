@@ -11,12 +11,12 @@ export default function SectionIntro({ sectionNumber, title, description, onCont
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-slate-50 flex flex-col items-center justify-center font-sans px-6 py-12">
       <div className="w-full max-w-3xl">
-        <div className="bg-white rounded-2xl shadow-lg p-8 md:p-12">
-          <h2 className="text-3xl md:text-4xl font-semibold text-slate-900 mb-6 text-center">
+        <div className="bg-white/10 rounded-2xl shadow-lg p-8 md:p-12">
+          <h2 className="text-3xl md:text-4xl font-semibold text-white mb-6 text-center">
             Seção {sectionNumber} – {title}
           </h2>
 
-          <p className="text-lg text-slate-700 mb-8 leading-relaxed text-center">
+          <p className="text-lg text-white/80 mb-8 leading-relaxed text-center">
             {description}
           </p>
 

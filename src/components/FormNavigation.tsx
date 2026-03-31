@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FormData } from '../types/form';
 import { formConfig, findStepById, getFirstStep } from '../formConfig';
 import ResultsPage from './ResultsPage';
-import CoursesPage from './CoursesPage';
-import ReportsPage from './ReportsPage';
+import CaixaEducaPage from './CaixaEducaPage';
 
 // sessionStorage key for form data
 const FORM_DATA_STORAGE_KEY = 'prevent-quiz-responses';
@@ -45,14 +44,13 @@ export default function FormNavigation() {
   const [history, setHistory] = useState<string[]>([]); // Track visited steps for back navigation
   const [isComplete, setIsComplete] = useState(false);
   const [finalPrice, setFinalPrice] = useState<string | null>(null);
-  const [showCourses, setShowCourses] = useState(false);
-  const [showReports, setShowReports] = useState(false);
+  const [showCaixaEduca, setShowCaixaEduca] = useState(false);
 
   // Dynamic sub-flow state for hormone therapy
   const [isDynamicSubFlowActive, setIsDynamicSubFlowActive] = useState(false);
   const [dynamicMedicationQueue, setDynamicMedicationQueue] = useState<string[]>([]);
   const [currentDynamicMedication, setCurrentDynamicMedication] = useState<string | null>(null);
-  const [dynamicSubStepIndex, setDynamicSubStepIndex] = useState(0); // 0: HT2, 1: HT3, 2: HT4
+  const [dynamicSubStepIndex, setDynamicSubStepIndex] = useState(0);
   const [dynamicHistory, setDynamicHistory] = useState<Array<{medication: string, stepIndex: number}>>([]);
 
   // Development state
@@ -237,15 +235,8 @@ export default function FormNavigation() {
 
   // Handle back navigation
   const handleBack = () => {
-    if (showReports) {
-      // If we're on the reports screen, go back to courses
-      setShowReports(false);
-      return;
-    }
-
-    if (showCourses) {
-      // If we're on the courses screen, go back to action plan
-      setShowCourses(false);
+    if (showCaixaEduca) {
+      setShowCaixaEduca(false);
       return;
     }
 
@@ -362,27 +353,23 @@ export default function FormNavigation() {
 
   // Render the current step component
   const renderCurrentStep = () => {
-    if (showReports) {
-      return <ReportsPage onBack={handleBack} />;
-    }
-
-    if (showCourses) {
-      return <CoursesPage onBack={handleBack} canGoBack={true} onNavigateToReports={() => setShowReports(true)} />;
+    if (showCaixaEduca) {
+      return <CaixaEducaPage onBack={handleBack} />;
     }
 
     if (isComplete) {
-      return <ResultsPage formData={formData} onBack={handleBack} canGoBack={canGoBack()} finalPrice={finalPrice || undefined} />;
+      return <ResultsPage formData={formData} onBack={handleBack} canGoBack={canGoBack()} finalPrice={finalPrice || undefined} onStartCaixaEduca={() => setShowCaixaEduca(true)} />;
     }
 
     const currentStep = getCurrentStep();
     if (!currentStep) {
       return (
-        <div className="min-h-screen bg-white flex flex-col items-center justify-center font-outfit px-6">
+        <div className="min-h-screen bg-[#003366] flex flex-col items-center justify-center font-outfit px-6">
           <div className="text-center">
-            <h1 className="text-2xl font-medium text-red-600 mb-4">
+            <h1 className="text-2xl font-medium text-red-400 mb-4">
               Error: Step Not Found
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-white/60 mb-6">
               Step "{currentStepId}" is not defined in the form configuration.
             </p>
             <button
@@ -418,7 +405,7 @@ export default function FormNavigation() {
 
     // Add onStartCourses prop if this is the ActionPlan component
     const componentProps = currentStepId === 'plan'
-      ? { ...baseProps, onStartCourses: () => setShowCourses(true) }
+      ? { ...baseProps, onStartCourses: () => setShowCaixaEduca(true) }
       : baseProps;
 
     return (
@@ -460,7 +447,7 @@ export default function FormNavigation() {
                     key={step.id}
                     onClick={() => jumpToStep(step.id)}
                     className={`block w-full text-left px-2 py-1 text-xs hover:bg-gray-700 rounded mb-1 ${
-                      currentStepId === step.id && !isDynamicSubFlowActive ? 'bg-blue-600' : ''
+                      currentStepId === step.id && !isDynamicSubFlowActive ? 'bg-[#F2C94C] text-[#003366]' : ''
                     }`}
                   >
                     {step.id} {step.title ? `(${step.title})` : ''}

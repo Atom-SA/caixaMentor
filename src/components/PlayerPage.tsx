@@ -12,8 +12,8 @@ export default function PlayerPage({ onBack }: PlayerPageProps) {
   const chatUrl = 'https://mentor-ia-picpay.vercel.app/?ID=18563c46-eb92-40c6-ada8-385b214bc7cf&lessonID=a11cc57f-27cc-470c-8b47-e04961f0a498';
 
   return (
-    <div className="min-h-screen bg-[#003366] flex flex-col">
-      <div className="fixed top-0 left-0 right-0 bg-[#003366] z-40 border-b border-white/10">
+    <div className="min-h-screen bg-navy flex flex-col">
+      <div className="fixed top-0 left-0 right-0 bg-navy/95 backdrop-blur-xl z-40 border-b border-white/[0.06]">
         <div className="px-4 py-4 flex items-center gap-3">
           <button
             onClick={onBack}

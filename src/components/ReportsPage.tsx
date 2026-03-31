@@ -1,8 +1,300 @@
-import { ArrowLeft, Award, BookOpen, Calendar, Clock, Download, Medal, TrendingUp, Target, Star, CheckCircle2, BarChart3, Activity } from 'lucide-react';
-import { useState } from 'react';
+import { Clock, BookOpen, CheckCircle2, Activity, TrendingUp, Calendar, Target, Medal, Star, Award, Download, Zap, Flame } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
-interface ReportsPageProps {
-  onBack: () => void;
+/* ─────────────────────────────────────────────
+   Radar / Spider chart helpers
+───────────────────────────────────────────── */
+const RADAR_CX = 150;
+const RADAR_CY = 150;
+const RADAR_MAX_R = 105;
+
+function radarPoint(angle: number, r: number) {
+  const rad = (angle * Math.PI) / 180;
+  return { x: RADAR_CX + r * Math.cos(rad), y: RADAR_CY + r * Math.sin(rad) };
+}
+
+function pointsStr(pts: { x: number; y: number }[]) {
+  return pts.map((p) => `${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(' ');
+}
+
+/* ─────────────────────────────────────────────
+   Donut ring component
+───────────────────────────────────────────── */
+function DonutRing({
+  score,
+  r = 52,
+  stroke = '#F2C94C',
+  trackColor = 'rgba(255,255,255,0.06)',
+  size = 140,
+}: {
+  score: number;
+  r?: number;
+  stroke?: string;
+  trackColor?: string;
+  size?: number;
+}) {
+  const [animated, setAnimated] = useState(0);
+  const circumference = 2 * Math.PI * r;
+  const dash = (animated / 100) * circumference;
+  const cx = size / 2;
+  const cy = size / 2;
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(score), 200);
+    return () => clearTimeout(t);
+  }, [score]);
+
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke={trackColor} strokeWidth="10" />
+      <circle
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill="none"
+        stroke={stroke}
+        strokeWidth="10"
+        strokeLinecap="round"
+        strokeDasharray={`${dash} ${circumference}`}
+        transform={`rotate(-90 ${cx} ${cy})`}
+        style={{ transition: 'stroke-dasharray 1.2s cubic-bezier(0.34,1.56,0.64,1)' }}
+      />
+    </svg>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Mini progress ring (goals)
+───────────────────────────────────────────── */
+function MiniRing({ pct, color }: { pct: number; color: string }) {
+  const [animated, setAnimated] = useState(0);
+  const r = 16;
+  const c = 2 * Math.PI * r;
+  const dash = (animated / 100) * c;
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(Math.min(pct, 100)), 400);
+    return () => clearTimeout(t);
+  }, [pct]);
+
+  return (
+    <svg width="40" height="40" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r={r} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="4" />
+      <circle
+        cx="20"
+        cy="20"
+        r={r}
+        fill="none"
+        stroke={color}
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeDasharray={`${dash} ${c}`}
+        transform="rotate(-90 20 20)"
+        style={{ transition: 'stroke-dasharray 1s ease' }}
+      />
+    </svg>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   Pentagon radar chart
+───────────────────────────────────────────── */
+function RadarChart({ categories }: { categories: { label: string; score: number; angle: number }[] }) {
+  const [animated, setAnimated] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(true), 300);
+    return () => clearTimeout(t);
+  }, []);
+
+  const rings = [0.25, 0.5, 0.75, 1.0];
+  const gridPolygons = rings.map((ratio) =>
+    categories.map((c) => radarPoint(c.angle, RADAR_MAX_R * ratio))
+  );
+  const dataPoints = categories.map((c) =>
+    radarPoint(c.angle, animated ? (c.score / 100) * RADAR_MAX_R : 0)
+  );
+  const labelPoints = categories.map((c) => ({
+    ...radarPoint(c.angle, RADAR_MAX_R + 24),
+    label: c.label,
+    score: c.score,
+  }));
+
+  return (
+    <svg viewBox="0 0 300 300" className="w-full max-w-[280px] mx-auto">
+      <defs>
+        <linearGradient id="radarFill" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#F2C94C" stopOpacity="0.22" />
+          <stop offset="100%" stopColor="#003366" stopOpacity="0.05" />
+        </linearGradient>
+      </defs>
+
+      {gridPolygons.map((pts, i) => (
+        <polygon key={i} points={pointsStr(pts)} fill="none" stroke="rgba(255,255,255,0.07)" strokeWidth="1" />
+      ))}
+
+      {categories.map((c) => {
+        const outer = radarPoint(c.angle, RADAR_MAX_R);
+        return (
+          <line key={c.label} x1={RADAR_CX} y1={RADAR_CY} x2={outer.x} y2={outer.y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+        );
+      })}
+
+      <polygon
+        points={pointsStr(dataPoints)}
+        fill="url(#radarFill)"
+        stroke="#F2C94C"
+        strokeWidth="1.5"
+        strokeLinejoin="round"
+        style={{ transition: 'all 1.2s cubic-bezier(0.34,1.56,0.64,1)' }}
+      />
+
+      {dataPoints.map((p, i) => (
+        <circle key={i} cx={p.x} cy={p.y} r="4" fill="#F2C94C" stroke="#001a33" strokeWidth="2"
+          style={{ transition: 'all 1.2s cubic-bezier(0.34,1.56,0.64,1)' }} />
+      ))}
+
+      {labelPoints.map((p, i) => (
+        <g key={i}>
+          <text
+            x={p.x} y={p.y - 4}
+            textAnchor={p.x < RADAR_CX - 8 ? 'end' : p.x > RADAR_CX + 8 ? 'start' : 'middle'}
+            fontSize="10" fill="rgba(255,255,255,0.45)"
+          >
+            {p.label}
+          </text>
+          <text
+            x={p.x} y={p.y + 10}
+            textAnchor={p.x < RADAR_CX - 8 ? 'end' : p.x > RADAR_CX + 8 ? 'start' : 'middle'}
+            fontSize="11" fontWeight="700" fill="#F2C94C"
+          >
+            {p.score}%
+          </text>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   SVG gradient bar chart
+───────────────────────────────────────────── */
+function BarChart({ data }: { data: { day: string; hours: number; isToday?: boolean }[] }) {
+  const [animated, setAnimated] = useState(false);
+  const maxH = Math.max(...data.map((d) => d.hours));
+  const chartH = 120;
+  const barW = 30;
+  const gap = 12;
+  const leftPad = 32;
+  const svgW = leftPad + data.length * (barW + gap) - gap + 4;
+  const svgH = chartH + 36;
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(true), 150);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full" style={{ overflow: 'visible' }}>
+      <defs>
+        {data.map((d, i) => (
+          <linearGradient key={i} id={`bg${i}`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor={d.isToday ? '#F2C94C' : '#005599'} stopOpacity="0.9" />
+            <stop offset="100%" stopColor={d.isToday ? '#F2C94C' : '#003366'} stopOpacity="0.15" />
+          </linearGradient>
+        ))}
+      </defs>
+
+      {[0, 1, 2, 3, 4].map((v) => {
+        const y = chartH - (v / 4) * chartH;
+        return (
+          <g key={v}>
+            <line x1={leftPad} y1={y} x2={svgW} y2={y} stroke="rgba(255,255,255,0.05)" strokeWidth="1" strokeDasharray="3 4" />
+            <text x={leftPad - 4} y={y + 3.5} textAnchor="end" fontSize="9" fill="rgba(255,255,255,0.25)">{v}h</text>
+          </g>
+        );
+      })}
+
+      {data.map((d, i) => {
+        const barH = animated ? Math.max((d.hours / maxH) * chartH, 4) : 4;
+        const x = leftPad + i * (barW + gap);
+        const y = chartH - barH;
+        return (
+          <g key={i}>
+            <rect x={x} y={y} width={barW} height={barH} rx="5" fill={`url(#bg${i})`}
+              style={{ transition: `height 0.9s cubic-bezier(0.34,1.56,0.64,1) ${i * 55}ms, y 0.9s cubic-bezier(0.34,1.56,0.64,1) ${i * 55}ms` }} />
+            {d.isToday && (
+              <rect x={x - 1} y={y - 1} width={barW + 2} height={barH + 2} rx="6" fill="none"
+                stroke="#F2C94C" strokeWidth="1" strokeOpacity="0.35" />
+            )}
+            {animated && (
+              <text x={x + barW / 2} y={y - 5} textAnchor="middle" fontSize="9"
+                fill={d.isToday ? '#F2C94C' : 'rgba(255,255,255,0.35)'}
+                fontWeight={d.isToday ? '700' : '400'}>
+                {d.hours}h
+              </text>
+            )}
+            <text x={x + barW / 2} y={chartH + 16} textAnchor="middle" fontSize="10"
+              fill={d.isToday ? '#F2C94C' : 'rgba(255,255,255,0.4)'}
+              fontWeight={d.isToday ? '700' : '400'}>
+              {d.day}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+/* ─────────────────────────────────────────────
+   SVG area / line chart
+───────────────────────────────────────────── */
+function AreaChart({ data }: { data: { month: string; value: number }[] }) {
+  const [animated, setAnimated] = useState(false);
+  const W = 320, H = 90;
+  const maxV = Math.max(...data.map((d) => d.value));
+  const minV = Math.min(...data.map((d) => d.value));
+  const range = maxV - minV || 1;
+  const pad = 10;
+
+  useEffect(() => {
+    const t = setTimeout(() => setAnimated(true), 400);
+    return () => clearTimeout(t);
+  }, []);
+
+  const pts = data.map((d, i) => ({
+    x: pad + (i / (data.length - 1)) * (W - pad * 2),
+    y: animated ? H - pad - ((d.value - minV) / range) * (H - pad * 2) : H - pad,
+    value: d.value,
+  }));
+
+  const pathD = `M ${pts[0].x} ${pts[0].y} ` + pts.slice(1).map((p) => `L ${p.x} ${p.y}`).join(' ');
+  const areaD = `M ${pts[0].x} ${H} L ${pts[0].x} ${pts[0].y} ` +
+    pts.slice(1).map((p) => `L ${p.x} ${p.y}`).join(' ') +
+    ` L ${pts[pts.length - 1].x} ${H} Z`;
+
+  return (
+    <svg viewBox={`0 0 ${W} ${H + 18}`} className="w-full">
+      <defs>
+        <linearGradient id="areaG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#F2C94C" stopOpacity="0.2" />
+          <stop offset="100%" stopColor="#F2C94C" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <path d={areaD} fill="url(#areaG)" style={{ transition: 'all 1s ease' }} />
+      <path d={pathD} fill="none" stroke="#F2C94C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
+        style={{ transition: 'all 1s ease' }} />
+      {pts.map((p, i) => (
+        <g key={i}>
+          <circle cx={p.x} cy={p.y} r="3.5" fill="#F2C94C" stroke="#001a33" strokeWidth="2"
+            style={{ transition: `all 1s ease ${i * 80}ms` }} />
+          <text x={p.x} y={H + 16} textAnchor="middle" fontSize="9" fill="rgba(255,255,255,0.35)">
+            {data[i].month}
+          </text>
+        </g>
+      ))}
+    </svg>
+  );
 }
 
 interface Certificate {
@@ -11,167 +303,129 @@ interface Certificate {
   courseDuration: string;
   completedDate: string;
   grade: number;
-  status: 'available' | 'pending';
   coverImage: string;
 }
 
-interface ProgressStat {
-  label: string;
-  value: string;
-  change: string;
-  trend: 'up' | 'down';
-  icon: any;
-  color: string;
-}
-
-export default function ReportsPage({ onBack }: ReportsPageProps) {
+export default function ReportsPage() {
   const [activeTab, setActiveTab] = useState<'overview' | 'certificates'>('overview');
 
-  const stats: ProgressStat[] = [
-    {
-      label: 'Total de Horas',
-      value: '24.5h',
-      change: '+5.2h esta semana',
-      trend: 'up',
-      icon: Clock,
-      color: '#F2C94C',
-    },
-    {
-      label: 'Cursos em Progresso',
-      value: '2',
-      change: '35% de conclusão média',
-      trend: 'up',
-      icon: BookOpen,
-      color: '#6C63FF',
-    },
-    {
-      label: 'Aulas Concluídas',
-      value: '19',
-      change: '+4 esta semana',
-      trend: 'up',
-      icon: CheckCircle2,
-      color: '#27AE60',
-    },
-    {
-      label: 'Sequência Atual',
-      value: '7 dias',
-      change: 'Melhor: 12 dias',
-      trend: 'up',
-      icon: Activity,
-      color: '#E67E22',
-    },
+  const stats = [
+    { label: 'Horas Estudadas', value: '24.5h', change: '+5.2h esta semana', icon: Clock, color: '#F2C94C' },
+    { label: 'Cursos Ativos', value: '2', change: '35% conclusão média', icon: BookOpen, color: '#8B5CF6' },
+    { label: 'Aulas Concluídas', value: '19', change: '+4 esta semana', icon: CheckCircle2, color: '#10B981' },
+    { label: 'Sequência', value: '7 dias', change: 'Recorde: 12 dias', icon: Flame, color: '#F97316' },
+  ];
+
+  const weeklyActivity = [
+    { day: 'Seg', hours: 2.5 },
+    { day: 'Ter', hours: 3.0 },
+    { day: 'Qua', hours: 1.5 },
+    { day: 'Qui', hours: 4.0 },
+    { day: 'Sex', hours: 2.0 },
+    { day: 'Sáb', hours: 3.5, isToday: true },
+    { day: 'Dom', hours: 1.0 },
+  ];
+
+  const monthlyProgress = [
+    { month: 'Out', value: 12 },
+    { month: 'Nov', value: 18 },
+    { month: 'Dez', value: 14 },
+    { month: 'Jan', value: 22 },
+    { month: 'Fev', value: 20 },
+    { month: 'Mar', value: 24.5 },
+  ];
+
+  const radarCategories = [
+    { label: 'Orçamento', score: 85, angle: -90 },
+    { label: 'Poupança', score: 90, angle: -18 },
+    { label: 'Planejamento', score: 75, angle: 54 },
+    { label: 'Investimentos', score: 70, angle: 126 },
+    { label: 'Dívidas', score: 60, angle: 198 },
+  ];
+
+  const overallScore = Math.round(
+    radarCategories.reduce((s, c) => s + c.score, 0) / radarCategories.length
+  );
+
+  const goals = [
+    { label: 'Concluir 3 cursos', current: 1, total: 3, color: '#8B5CF6' },
+    { label: '20h de estudo', current: 24.5, total: 20, color: '#10B981' },
+    { label: 'Sequência de 7 dias', current: 7, total: 7, color: '#F97316' },
+    { label: 'Quitar 1 dívida', current: 0, total: 1, color: '#F2C94C' },
   ];
 
   const certificates: Certificate[] = [
     {
       id: '1',
-      courseTitle: 'Fundamentos do Planejamento Financeiro',
-      courseDuration: '4h 30min',
+      courseTitle: 'Educação Financeira',
+      courseDuration: '8h',
       completedDate: '15 de Janeiro, 2024',
       grade: 95,
-      status: 'available',
       coverImage: 'https://s3.iatom.site/atom/Financas.webp',
     },
   ];
 
-  const weeklyActivity = [
-    { day: 'Seg', hours: 2.5, label: 'S' },
-    { day: 'Ter', hours: 3.0, label: 'T' },
-    { day: 'Qua', hours: 1.5, label: 'Q' },
-    { day: 'Qui', hours: 4.0, label: 'Q' },
-    { day: 'Sex', hours: 2.0, label: 'S' },
-    { day: 'Sáb', hours: 3.5, label: 'S' },
-    { day: 'Dom', hours: 1.0, label: 'D' },
-  ];
-
-  const monthlyProgress = [
-    { week: 'Sem 1', hours: 8, label: 'S1' },
-    { week: 'Sem 2', hours: 12, label: 'S2' },
-    { week: 'Sem 3', hours: 15, label: 'S3' },
-    { week: 'Sem 4', hours: 14.5, label: 'S4' },
-  ];
-
-  const performanceData = [
-    { category: 'Orçamento', score: 85, color: '#27AE60' },
-    { category: 'Investimentos', score: 70, color: '#6C63FF' },
-    { category: 'Dívidas', score: 60, color: '#E67E22' },
-    { category: 'Poupança', score: 90, color: '#F2C94C' },
-    { category: 'Planejamento', score: 75, color: '#3498DB' },
-  ];
-
-  const maxHours = Math.max(...weeklyActivity.map(d => d.hours));
-  const maxMonthlyHours = Math.max(...monthlyProgress.map(d => d.hours));
-  const maxScore = 100;
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#003366] via-[#004080] to-[#003366] p-4 sm:p-6 lg:p-8">
-      <div className="max-w-7xl mx-auto">
-        <div className="flex items-center justify-between mb-6 sm:mb-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-8 animate-fade-in">
+      {/* Sub-tabs */}
+      <div className="flex gap-1 mb-8 p-1 rounded-xl bg-white/[0.03] border border-white/[0.06] w-fit">
+        {(['overview', 'certificates'] as const).map((tab) => (
           <button
-            onClick={onBack}
-            className="flex items-center gap-2 text-white/70 hover:text-white transition-colors group"
-          >
-            <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
-            <span className="hidden sm:inline">Voltar</span>
-          </button>
-
-          <div className="flex items-center gap-2">
-            <BarChart3 className="w-6 h-6 text-[#F2C94C]" />
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white">
-              Meus Relatórios
-            </h1>
-          </div>
-
-          <div className="w-16 sm:w-20" />
-        </div>
-
-        <div className="flex gap-2 mb-6 sm:mb-8 overflow-x-auto pb-2 scrollbar-hide">
-          <button
-            onClick={() => setActiveTab('overview')}
-            className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-sm whitespace-nowrap transition-all ${
-              activeTab === 'overview'
-                ? 'bg-[#F2C94C] text-[#003366] shadow-lg'
-                : 'bg-white/10 text-white hover:bg-white/15'
+            key={tab}
+            onClick={() => setActiveTab(tab)}
+            className={`px-5 py-2 rounded-lg text-sm font-medium transition-all ${
+              activeTab === tab
+                ? 'bg-white/10 text-white shadow-sm'
+                : 'text-white/40 hover:text-white/70'
             }`}
           >
-            Visão Geral
+            {tab === 'overview' ? 'Visão Geral' : 'Certificados'}
           </button>
-          <button
-            onClick={() => setActiveTab('certificates')}
-            className={`px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl font-semibold text-sm whitespace-nowrap transition-all ${
-              activeTab === 'certificates'
-                ? 'bg-[#F2C94C] text-[#003366] shadow-lg'
-                : 'bg-white/10 text-white hover:bg-white/15'
-            }`}
-          >
-            Certificados
-          </button>
-        </div>
+        ))}
+      </div>
 
-        {activeTab === 'overview' && (
-          <div className="space-y-6 animate-fade-in">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-              {stats.map((stat, index) => {
+      {activeTab === 'overview' && (
+        <div className="space-y-5 animate-fade-in">
+
+          {/* Hero row: Score donut + stat cards */}
+          <div className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-5">
+            {/* Overall score donut */}
+            <div className="rounded-2xl p-6 bg-white/[0.03] border border-white/[0.06] flex flex-col items-center justify-center min-w-[200px]">
+              <div className="relative">
+                <DonutRing score={overallScore} r={52} size={140} />
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-3xl font-bold text-white leading-none">{overallScore}</span>
+                  <span className="text-[11px] text-white/40 mt-0.5">de 100</span>
+                </div>
+              </div>
+              <div className="text-white/70 text-sm font-medium mt-3">Saúde Financeira</div>
+              <div className="flex items-center gap-1.5 text-emerald-400 text-xs mt-1.5">
+                <TrendingUp className="w-3.5 h-3.5" />
+                +8 pts este mês
+              </div>
+            </div>
+
+            {/* Stat cards 2×2 */}
+            <div className="grid grid-cols-2 gap-3">
+              {stats.map((stat, i) => {
                 const Icon = stat.icon;
                 return (
                   <div
                     key={stat.label}
-                    className="bg-white/5 backdrop-blur-sm rounded-2xl p-4 sm:p-5 border border-white/20 hover:border-white/30 transition-all animate-slide-up"
-                    style={{ animationDelay: `${index * 100}ms` }}
+                    className="rounded-xl p-4 bg-white/[0.03] border border-white/[0.06] animate-slide-up"
+                    style={{ animationDelay: `${i * 70}ms` }}
                   >
-                    <div
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center mb-3 sm:mb-4"
-                      style={{ backgroundColor: `${stat.color}20`, border: `1px solid ${stat.color}40` }}
-                    >
-                      <Icon className="w-5 h-5 sm:w-6 sm:h-6" style={{ color: stat.color }} />
+                    <div className="flex items-start justify-between mb-3">
+                      <div
+                        className="w-8 h-8 rounded-lg flex items-center justify-center"
+                        style={{ backgroundColor: `${stat.color}18` }}
+                      >
+                        <Icon className="w-4 h-4" style={{ color: stat.color }} />
+                      </div>
                     </div>
-                    <div className="text-2xl sm:text-3xl font-bold text-white mb-1">
-                      {stat.value}
-                    </div>
-                    <div className="text-xs sm:text-sm text-white/60 mb-2">
-                      {stat.label}
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-green-400">
+                    <div className="text-xl font-bold text-white leading-none mb-0.5">{stat.value}</div>
+                    <div className="text-[11px] text-white/40 mb-2">{stat.label}</div>
+                    <div className="flex items-center gap-1 text-[10px] text-emerald-400">
                       <TrendingUp className="w-3 h-3" />
                       {stat.change}
                     </div>
@@ -179,378 +433,168 @@ export default function ReportsPage({ onBack }: ReportsPageProps) {
                 );
               })}
             </div>
+          </div>
 
-            <div className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 animate-slide-up" style={{ animationDelay: '400ms' }}>
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                  <Calendar className="w-5 h-5 text-[#F2C94C]" />
+          {/* Charts row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {/* Weekly bar chart */}
+            <div className="rounded-2xl p-5 bg-white/[0.03] border border-white/[0.06]">
+              <div className="flex items-center justify-between mb-5">
+                <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+                  <Calendar className="w-4 h-4 text-[#F2C94C]" />
                   Atividade Semanal
                 </h2>
-                <span className="text-xs sm:text-sm text-white/60">Última semana</span>
+                <span className="text-xs text-white/30 tabular-nums">17.5h esta semana</span>
               </div>
+              <BarChart data={weeklyActivity} />
+            </div>
 
-              <div className="flex items-end justify-between gap-2 sm:gap-4 h-56 sm:h-64">
-                {weeklyActivity.map((day, index) => {
-                  const heightPercent = (day.hours / maxHours) * 100;
-                  const isHighActivity = day.hours >= 3;
+            {/* Radar chart */}
+            <div className="rounded-2xl p-5 bg-white/[0.03] border border-white/[0.06]">
+              <h2 className="text-sm font-semibold text-white mb-4 flex items-center gap-2">
+                <Zap className="w-4 h-4 text-[#F2C94C]" />
+                Desempenho por Área
+              </h2>
+              <RadarChart categories={radarCategories} />
+            </div>
+          </div>
 
+          {/* Monthly progress area chart */}
+          <div className="rounded-2xl p-5 bg-white/[0.03] border border-white/[0.06]">
+            <div className="flex items-center justify-between mb-5">
+              <h2 className="text-sm font-semibold text-white flex items-center gap-2">
+                <TrendingUp className="w-4 h-4 text-[#F2C94C]" />
+                Progresso Mensal — Horas de Estudo
+              </h2>
+              <span className="text-xs text-white/30">últimos 6 meses</span>
+            </div>
+            <AreaChart data={monthlyProgress} />
+          </div>
+
+          {/* Goals + Achievements */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            {/* Goals with mini rings */}
+            <div className="rounded-2xl p-5 bg-white/[0.03] border border-white/[0.06]">
+              <h2 className="text-sm font-semibold text-white mb-5 flex items-center gap-2">
+                <Target className="w-4 h-4 text-[#F2C94C]" />
+                Metas do Mês
+              </h2>
+              <div className="space-y-3">
+                {goals.map((goal) => {
+                  const pct = Math.min((goal.current / goal.total) * 100, 100);
+                  const done = pct >= 100;
                   return (
-                    <div key={day.day} className="flex-1 flex flex-col items-center gap-3">
-                      <div className="relative w-full h-full">
-                        <div className="absolute bottom-0 left-0 right-0 h-full flex flex-col justify-end">
-                          <div className="relative group">
-                            <div
-                              className="w-full rounded-t-xl bg-gradient-to-t from-[#F2C94C] via-[#F2C94C]/90 to-[#F2C94C]/70 shadow-lg transition-all duration-500 hover:scale-105 cursor-pointer"
-                              style={{ height: `${Math.max(heightPercent, 8)}%` }}
-                            >
-                              <div className="absolute inset-0 bg-gradient-to-t from-white/30 via-white/10 to-transparent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                              <div className="absolute -top-8 left-1/2 -translate-x-1/2 bg-[#003366] border border-[#F2C94C] px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                <span className="text-xs font-bold text-[#F2C94C]">{day.hours}h</span>
-                              </div>
-
-                              {isHighActivity && (
-                                <div className="absolute top-2 left-1/2 -translate-x-1/2">
-                                  <div className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
-                                </div>
-                              )}
-                            </div>
-
-                            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[2px] h-2 bg-white/20" />
-                          </div>
+                    <div key={goal.label} className="flex items-center gap-3">
+                      <div className="relative flex-shrink-0">
+                        <MiniRing pct={pct} color={done ? '#10B981' : goal.color} />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-[9px] font-bold" style={{ color: done ? '#10B981' : goal.color }}>
+                            {Math.round(pct)}%
+                          </span>
                         </div>
                       </div>
-
-                      <div className="text-center space-y-1">
-                        <div className="text-xs sm:text-sm font-bold text-white">{day.label}</div>
-                        <div className="text-[10px] sm:text-xs text-white/50">{day.hours}h</div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-white/70 truncate">{goal.label}</span>
+                          <span className="text-xs font-semibold ml-2 flex-shrink-0" style={{ color: done ? '#10B981' : goal.color }}>
+                            {goal.current}/{goal.total}
+                          </span>
+                        </div>
+                        <div className="mt-1.5 h-1 bg-white/[0.06] rounded-full overflow-hidden">
+                          <div className="h-full rounded-full transition-all duration-700"
+                            style={{ width: `${pct}%`, backgroundColor: done ? '#10B981' : goal.color }} />
+                        </div>
                       </div>
                     </div>
                   );
                 })}
               </div>
-
-              <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-white/60">
-                <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 rounded-full bg-[#F2C94C]" />
-                  <span>Alta atividade (≥3h)</span>
-                </div>
-                <div className="text-right">
-                  <span className="text-white font-semibold">14.5h</span> esta semana
-                </div>
-              </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 animate-slide-up" style={{ animationDelay: '500ms' }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                    <TrendingUp className="w-5 h-5 text-[#F2C94C]" />
-                    Progresso Mensal
-                  </h2>
-                  <span className="text-xs sm:text-sm text-white/60">Janeiro 2024</span>
-                </div>
-
-                <div className="flex items-end justify-between gap-3 sm:gap-4 h-48">
-                  {monthlyProgress.map((week, index) => {
-                    const heightPercent = (week.hours / maxMonthlyHours) * 100;
-                    const isCurrentWeek = index === monthlyProgress.length - 1;
-
-                    return (
-                      <div key={week.week} className="flex-1 flex flex-col items-center gap-3">
-                        <div className="relative w-full h-full">
-                          <div className="absolute bottom-0 left-0 right-0 h-full flex flex-col justify-end">
-                            <div className="relative group">
-                              <div
-                                className={`w-full rounded-t-xl shadow-lg transition-all duration-500 hover:scale-105 cursor-pointer ${
-                                  isCurrentWeek
-                                    ? 'bg-gradient-to-t from-[#F2C94C] via-[#F2C94C]/90 to-[#F2C94C]/70'
-                                    : 'bg-gradient-to-t from-[#6C63FF] via-[#6C63FF]/90 to-[#6C63FF]/70'
-                                }`}
-                                style={{ height: `${Math.max(heightPercent, 10)}%` }}
-                              >
-                                <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-white/5 to-transparent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                                <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-[#003366] border border-current px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                  <span className={`text-xs font-bold ${isCurrentWeek ? 'text-[#F2C94C]' : 'text-[#6C63FF]'}`}>
-                                    {week.hours}h
-                                  </span>
-                                </div>
-
-                                {isCurrentWeek && (
-                                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#F2C94C] text-[#003366] px-2 py-0.5 rounded-full text-[10px] font-bold">
-                                    ATUAL
-                                  </div>
-                                )}
-                              </div>
-
-                              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[2px] h-2 bg-white/20" />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="text-center space-y-1">
-                          <div className="text-xs sm:text-sm font-bold text-white">{week.label}</div>
-                          <div className="text-[10px] sm:text-xs text-white/50">{week.hours}h</div>
-                        </div>
+            {/* Achievements */}
+            <div className="rounded-2xl p-5 bg-white/[0.03] border border-white/[0.06]">
+              <h2 className="text-sm font-semibold text-white mb-5 flex items-center gap-2">
+                <Medal className="w-4 h-4 text-[#F2C94C]" />
+                Conquistas
+              </h2>
+              <div className="space-y-2.5">
+                {[
+                  { icon: Star, title: 'Primeira Conquista', desc: 'Completou o primeiro curso', gradient: 'from-yellow-400 to-orange-500', unlocked: true },
+                  { icon: Flame, title: 'Maratonista', desc: '7 dias consecutivos', gradient: 'from-orange-400 to-red-500', unlocked: true },
+                  { icon: Activity, title: 'Investidor Iniciante', desc: 'Completou módulo de Investimentos', gradient: 'from-purple-400 to-purple-600', unlocked: true },
+                  { icon: Medal, title: 'Mestre Financeiro', desc: 'Complete 5 cursos para desbloquear', gradient: 'from-gray-600 to-gray-700', unlocked: false },
+                ].map((a) => {
+                  const Icon = a.icon;
+                  return (
+                    <div key={a.title} className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
+                      a.unlocked ? 'bg-white/[0.04] border border-white/[0.07]' : 'bg-white/[0.02] border border-white/[0.04] opacity-40'
+                    }`}>
+                      <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${a.gradient} flex items-center justify-center flex-shrink-0`}>
+                        <Icon className="w-5 h-5 text-white" fill={a.unlocked ? 'currentColor' : 'none'} />
                       </div>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-green-400" />
-                    <span className="text-white/60">Crescimento:</span>
-                    <span className="text-green-400 font-semibold">+81%</span>
-                  </div>
-                  <div className="text-white/60">
-                    Total: <span className="text-white font-semibold">49.5h</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 animate-slide-up" style={{ animationDelay: '550ms' }}>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-                    <BarChart3 className="w-5 h-5 text-[#F2C94C]" />
-                    Desempenho por Área
-                  </h2>
-                  <span className="text-xs sm:text-sm text-white/60">Este mês</span>
-                </div>
-
-                <div className="flex items-end justify-between gap-2 sm:gap-3 h-48">
-                  {performanceData.map((item, index) => {
-                    const heightPercent = (item.score / maxScore) * 100;
-
-                    return (
-                      <div key={item.category} className="flex-1 flex flex-col items-center gap-3">
-                        <div className="relative w-full h-full">
-                          <div className="absolute bottom-0 left-0 right-0 h-full flex flex-col justify-end">
-                            <div className="relative group">
-                              <div
-                                className="w-full rounded-t-xl shadow-lg transition-all duration-500 hover:scale-105 cursor-pointer"
-                                style={{
-                                  height: `${Math.max(heightPercent, 10)}%`,
-                                  background: `linear-gradient(to top, ${item.color}, ${item.color}CC, ${item.color}99)`
-                                }}
-                              >
-                                <div className="absolute inset-0 bg-gradient-to-t from-white/20 via-white/5 to-transparent rounded-t-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-
-                                <div
-                                  className="absolute -top-10 left-1/2 -translate-x-1/2 border px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-10"
-                                  style={{
-                                    backgroundColor: '#003366',
-                                    borderColor: item.color,
-                                    color: item.color
-                                  }}
-                                >
-                                  <span className="text-xs font-bold">
-                                    {item.score}%
-                                  </span>
-                                </div>
-
-                                <div className="absolute top-2 left-1/2 -translate-x-1/2 text-white text-xs font-bold opacity-0 group-hover:opacity-100 transition-opacity">
-                                  {item.score}
-                                </div>
-                              </div>
-
-                              <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[2px] h-2 bg-white/20" />
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="text-center">
-                          <div className="text-[10px] sm:text-xs font-semibold text-white/80 leading-tight">
-                            {item.category}
-                          </div>
-                          <div className="text-[10px] text-white/50 mt-0.5">{item.score}%</div>
-                        </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-medium text-white leading-tight">{a.title}</div>
+                        <div className="text-[11px] text-white/40">{a.desc}</div>
                       </div>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-6 pt-4 border-t border-white/10 flex items-center justify-between text-xs">
-                  <div className="text-white/60">
-                    Média geral: <span className="text-[#F2C94C] font-semibold">76%</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-green-400">
-                    <TrendingUp className="w-3 h-3" />
-                    <span className="font-semibold">Bom desempenho</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 animate-slide-up" style={{ animationDelay: '600ms' }}>
-                <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2">
-                  <Target className="w-5 h-5 text-[#F2C94C]" />
-                  Metas Mensais
-                </h2>
-
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-white/80">Concluir 3 cursos</span>
-                      <span className="text-sm font-semibold text-[#F2C94C]">1/3</span>
+                      {a.unlocked && (
+                        <div className="w-5 h-5 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-400" />
+                        </div>
+                      )}
                     </div>
-                    <div className="w-full bg-white/10 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-[#F2C94C] to-[#F2C94C]/70 h-full rounded-full" style={{ width: '33%' }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-white/80">20 horas de estudo</span>
-                      <span className="text-sm font-semibold text-[#F2C94C]">24.5/20</span>
-                    </div>
-                    <div className="w-full bg-white/10 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-green-400 to-green-500 h-full rounded-full" style={{ width: '100%' }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm text-white/80">Manter sequência de 7 dias</span>
-                      <span className="text-sm font-semibold text-[#F2C94C]">7/7</span>
-                    </div>
-                    <div className="w-full bg-white/10 rounded-full h-2">
-                      <div className="bg-gradient-to-r from-green-400 to-green-500 h-full rounded-full" style={{ width: '100%' }} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-5 sm:p-6 border border-white/20 animate-slide-up" style={{ animationDelay: '650ms' }}>
-                <h2 className="text-lg sm:text-xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2">
-                  <Medal className="w-5 h-5 text-[#F2C94C]" />
-                  Conquistas
-                </h2>
-
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-[#F2C94C]/30">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center flex-shrink-0">
-                      <Star className="w-6 h-6 text-white" fill="currentColor" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-white">Primeira Conquista</div>
-                      <div className="text-xs text-white/60">Completou o primeiro curso</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/20">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center flex-shrink-0">
-                      <Activity className="w-6 h-6 text-white" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-white">Maratonista</div>
-                      <div className="text-xs text-white/60">7 dias consecutivos estudando</div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-3 p-3 bg-white/5 rounded-xl border border-white/20 opacity-50">
-                    <div className="w-12 h-12 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
-                      <Medal className="w-6 h-6 text-white/40" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="text-sm font-semibold text-white/60">Mestre Financeiro</div>
-                      <div className="text-xs text-white/40">Complete 5 cursos</div>
-                    </div>
-                  </div>
-                </div>
+                  );
+                })}
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
-        {activeTab === 'certificates' && (
-          <div className="space-y-6 animate-fade-in">
-            {certificates.length > 0 ? (
-              <div className="grid grid-cols-1 gap-4 sm:gap-6">
-                {certificates.map((cert, index) => (
-                  <div
-                    key={cert.id}
-                    className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl border border-white/20 overflow-hidden hover:border-[#F2C94C]/50 transition-all hover:scale-[1.01] animate-slide-up"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <div className="flex flex-col sm:flex-row">
-                      <div className="relative w-full sm:w-48 h-32 sm:h-auto bg-gradient-to-br from-gray-800 to-gray-900">
-                        <img
-                          src={cert.coverImage}
-                          alt={cert.courseTitle}
-                          className="w-full h-full object-cover"
-                        />
-                        <div className="absolute top-3 right-3 bg-green-500 text-white px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5" />
-                          Disponível
-                        </div>
-                      </div>
+      {activeTab === 'certificates' && (
+        <div className="space-y-4 animate-fade-in">
+          {certificates.map((cert) => (
+            <div key={cert.id} className="flex flex-col sm:flex-row rounded-2xl overflow-hidden bg-white/[0.03] border border-white/[0.06]">
+              <div className="relative w-full sm:w-52 h-36 sm:h-auto bg-gray-900 flex-shrink-0">
+                <img src={cert.coverImage} alt={cert.courseTitle} className="w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#001a33]/60" />
+                <div className="absolute top-3 right-3 flex items-center gap-1 px-2 py-1 rounded-md bg-emerald-500/90 text-white text-[11px] font-semibold">
+                  <CheckCircle2 className="w-3 h-3" />
+                  Concluído
+                </div>
+              </div>
 
-                      <div className="flex-1 p-5 sm:p-6">
-                        <div className="flex items-start justify-between gap-4 mb-3">
-                          <div className="flex-1">
-                            <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-                              {cert.courseTitle}
-                            </h3>
-                            <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm text-white/60">
-                              <div className="flex items-center gap-1.5">
-                                <Calendar className="w-4 h-4" />
-                                {cert.completedDate}
-                              </div>
-                              <div className="flex items-center gap-1.5">
-                                <Clock className="w-4 h-4" />
-                                {cert.courseDuration}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex-shrink-0 text-center">
-                            <div className="text-2xl sm:text-3xl font-bold text-[#F2C94C]">
-                              {cert.grade}
-                            </div>
-                            <div className="text-xs text-white/60">Nota Final</div>
-                          </div>
-                        </div>
-
-                        <div className="flex flex-col sm:flex-row gap-3 mt-4">
-                          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#F2C94C] text-[#003366] rounded-xl font-semibold text-sm hover:bg-[#F2C94C]/90 transition-all shadow-lg">
-                            <Download className="w-4 h-4" />
-                            Baixar Certificado
-                          </button>
-                          <button className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-white/10 text-white rounded-xl font-semibold text-sm hover:bg-white/15 transition-all">
-                            <Award className="w-4 h-4" />
-                            Compartilhar
-                          </button>
-                        </div>
-                      </div>
+              <div className="flex-1 p-5">
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div>
+                    <h3 className="text-base font-semibold text-white mb-2">{cert.courseTitle}</h3>
+                    <div className="flex flex-wrap items-center gap-3 text-xs text-white/40">
+                      <div className="flex items-center gap-1.5"><Calendar className="w-3.5 h-3.5" />{cert.completedDate}</div>
+                      <div className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" />{cert.courseDuration}</div>
                     </div>
                   </div>
-                ))}
-              </div>
-            ) : (
-              <div className="bg-white/5 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-8 sm:p-12 border border-white/20 text-center">
-                <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-white/10 flex items-center justify-center">
-                  <Award className="w-10 h-10 text-white/40" />
+                  <div className="relative flex-shrink-0">
+                    <DonutRing score={cert.grade} r={22} size={60} />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-sm font-bold text-[#F2C94C] leading-none">{cert.grade}</span>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold text-white mb-3">
-                  Nenhum certificado ainda
-                </h3>
-                <p className="text-white/60 max-w-md mx-auto mb-6">
-                  Complete seus cursos para desbloquear certificados e compartilhar suas conquistas
-                </p>
-                <button
-                  onClick={onBack}
-                  className="px-6 py-3 bg-[#F2C94C] text-[#003366] rounded-xl font-semibold hover:bg-[#F2C94C]/90 transition-all"
-                >
-                  Explorar Cursos
-                </button>
+
+                <div className="flex gap-2 mt-4">
+                  <button className="flex items-center gap-2 px-4 py-2.5 bg-[#F2C94C] text-[#003366] rounded-xl font-semibold text-sm hover:brightness-110 transition-all">
+                    <Download className="w-4 h-4" />
+                    Baixar PDF
+                  </button>
+                  <button className="flex items-center gap-2 px-4 py-2.5 bg-white/5 text-white/70 rounded-xl font-medium text-sm hover:bg-white/10 transition-all border border-white/[0.06]">
+                    <Award className="w-4 h-4" />
+                    Compartilhar
+                  </button>
+                </div>
               </div>
-            )}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -37,16 +37,16 @@ export default function ExpenseControlForm({ onContinue, onBack, canGoBack, form
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
 
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-white mb-2">
             Gastos
           </h2>
-          <p className="text-gray-600">
+          <p className="text-white/60">
             Aqui o foco é entender o seu fluxo de gastos e como você lida com sobras ou apertos no fim do mês.
           </p>
         </div>
@@ -54,7 +54,7 @@ export default function ExpenseControlForm({ onContinue, onBack, canGoBack, form
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Pergunta principal */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Você possui algum tipo de controle de gastos?
             </label>
             <div className="space-y-3">
@@ -64,7 +64,7 @@ export default function ExpenseControlForm({ onContinue, onBack, canGoBack, form
                   className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
                     hasExpenseControl === option
                       ? 'border-accent bg-blue-50'
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : 'border-white/20 hover:bg-white/5'
                   }`}
                 >
                   <input
@@ -80,7 +80,7 @@ export default function ExpenseControlForm({ onContinue, onBack, canGoBack, form
                     }}
                     className="w-4 h-4 text-accent focus:ring-accent"
                   />
-                  <span className="ml-3 text-gray-900">{option}</span>
+                  <span className="ml-3 text-white">{option}</span>
                 </label>
               ))}
             </div>
@@ -89,7 +89,7 @@ export default function ExpenseControlForm({ onContinue, onBack, canGoBack, form
           {/* Pergunta condicional */}
           {hasExpenseControl && hasExpenseControl !== 'Nenhum' && (
             <div>
-              <label className="block text-lg font-medium text-gray-900 mb-4">
+              <label className="block text-lg font-medium text-white mb-4">
                 Com que frequência você atualiza esse controle?
               </label>
               <div className="space-y-3">
@@ -99,7 +99,7 @@ export default function ExpenseControlForm({ onContinue, onBack, canGoBack, form
                     className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
                       updateFrequency === option
                         ? 'border-accent bg-blue-50'
-                        : 'border-gray-300 hover:bg-gray-50'
+                        : 'border-white/20 hover:bg-white/5'
                     }`}
                   >
                     <input
@@ -110,7 +110,7 @@ export default function ExpenseControlForm({ onContinue, onBack, canGoBack, form
                       onChange={(e) => setUpdateFrequency(e.target.value)}
                       className="w-4 h-4 text-accent focus:ring-accent"
                     />
-                    <span className="ml-3 text-gray-900">{option}</span>
+                    <span className="ml-3 text-white">{option}</span>
                   </label>
                 ))}
               </div>
@@ -124,8 +124,8 @@ export default function ExpenseControlForm({ onContinue, onBack, canGoBack, form
               disabled={!isValid}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 isValid
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Continuar
