@@ -23,13 +23,13 @@ export default function MonthlyExpensesForm({ onContinue, onBack, canGoBack, for
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-3">
+            <label className="block text-lg font-medium text-white mb-3">
               Quanto gasta em média por mês (total)?
             </label>
             <input
@@ -40,7 +40,7 @@ export default function MonthlyExpensesForm({ onContinue, onBack, canGoBack, for
                 setMonthlyExpenses(newCents);
                 setDisplayExpenses(formatCurrencyInput(newCents));
               }}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
               placeholder="R$ 0,00"
               required
             />
@@ -52,8 +52,8 @@ export default function MonthlyExpensesForm({ onContinue, onBack, canGoBack, for
               disabled={monthlyExpenses === 0}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 monthlyExpenses > 0
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Continuar

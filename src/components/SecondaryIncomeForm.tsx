@@ -76,14 +76,14 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Pergunta principal */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Possui outra fonte de renda ativa?
             </label>
             <div className="flex gap-4">
@@ -93,7 +93,7 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
                   className={`flex-1 text-center p-4 border rounded-lg cursor-pointer transition-colors ${
                     hasSecondaryIncome === option
                       ? 'border-accent bg-blue-50'
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : 'border-white/20 hover:bg-white/5'
                   }`}
                 >
                   <input
@@ -112,7 +112,7 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
                     }}
                     className="hidden"
                   />
-                  <span className="capitalize text-gray-900">{option}</span>
+                  <span className="capitalize text-white">{option}</span>
                 </label>
               ))}
             </div>
@@ -121,7 +121,7 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
           {/* Opções se "Sim" */}
           {hasSecondaryIncome === 'Sim' && (
             <div className="space-y-4">
-              <label className="block text-lg font-medium text-gray-900 mb-4">
+              <label className="block text-lg font-medium text-white mb-4">
                 Se sim, quais?
               </label>
               <div className="space-y-3">
@@ -131,7 +131,7 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
                     className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
                       selectedSources.includes(option)
                         ? 'border-accent bg-blue-50'
-                        : 'border-gray-300 hover:bg-gray-50'
+                        : 'border-white/20 hover:bg-white/5'
                     }`}
                   >
                     <input
@@ -141,7 +141,7 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
                       onChange={() => handleCheckboxChange(option)}
                       className="w-4 h-4 text-accent focus:ring-accent"
                     />
-                    <span className="ml-3 text-gray-900">{option}</span>
+                    <span className="ml-3 text-white">{option}</span>
                   </label>
                 ))}
               </div>
@@ -149,7 +149,7 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
               {/* Campo "Outros" condicional */}
               {selectedSources.includes('Outros') && (
                 <div className="mt-4">
-                  <label className="block text-lg font-medium text-gray-900 mb-2">
+                  <label className="block text-lg font-medium text-white mb-2">
                     Especifique:
                   </label>
                   <input
@@ -157,14 +157,14 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
                     value={otherSegundaryIncomeSource}
                     onChange={(e) => setotherSegundaryIncomeSource(e.target.value)}
                     placeholder="Descreva sua outra fonte de renda"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                    className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
                   />
                 </div>
               )}
 
               {/* Campo de valor */}
               <div className="mt-4">
-  <label className="block text-lg font-medium text-gray-900 mb-2">
+  <label className="block text-lg font-medium text-white mb-2">
     Valor mensal aproximado dessa renda
   </label>
   <input
@@ -177,7 +177,7 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
       setDisplayValue(formatCurrencyInput(newCents));
     }}
     placeholder="Ex: R$ 1.500,00"
-    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+    className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
   />
 </div>
 
@@ -190,8 +190,8 @@ export default function SecondaryIncomeForm({ onContinue, onBack, canGoBack, for
               disabled={!isValid}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 isValid
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Continuar

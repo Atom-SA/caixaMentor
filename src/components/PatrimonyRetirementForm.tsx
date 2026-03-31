@@ -55,17 +55,17 @@ export default function PatrimonyRetirementForm({
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl font-bold text-white mb-2">
           O Longo Prazo
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-3">
+            <label className="block text-lg font-medium text-white mb-3">
               Pensando no futuro, quanto precisaria receber por mês de aposentadoria para viver tranquilo(a)?
             </label>
             <input
@@ -78,12 +78,12 @@ export default function PatrimonyRetirementForm({
                 setDisplayRetirement(formatCurrencyInput(newCents));
               }}
               placeholder="Ex: R$ 5.000,00"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
             />
           </div>
 
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-3">
+            <label className="block text-lg font-medium text-white mb-3">
               Com quantos anos pretende se aposentar?
             </label>
             <input
@@ -94,13 +94,13 @@ export default function PatrimonyRetirementForm({
               placeholder="Ex: 65"
               min="1"
               max="120"
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
             />
           </div>
 
           {/* NOVA PERGUNTA – Seguro de vida */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Possui seguro de vida?
             </label>
             <div className="flex gap-4">
@@ -110,7 +110,7 @@ export default function PatrimonyRetirementForm({
                   className={`flex-1 text-center p-4 border rounded-lg cursor-pointer transition-colors ${
                     hasLifeInsurance === opt
                       ? 'border-accent bg-slate-900/10'
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : 'border-white/20 hover:bg-white/5'
                   }`}
                 >
                   <input
@@ -128,7 +128,7 @@ export default function PatrimonyRetirementForm({
                     }}
                     className="hidden"
                   />
-                  <span className="text-gray-900">{opt}</span>
+                  <span className="text-white">{opt}</span>
                 </label>
               ))}
             </div>
@@ -137,7 +137,7 @@ export default function PatrimonyRetirementForm({
           {hasLifeInsurance === 'Sim' && (
             <>
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-3">
+                <label className="block text-lg font-medium text-white mb-3">
                   Qual empresa?
                 </label>
                 <input
@@ -145,12 +145,12 @@ export default function PatrimonyRetirementForm({
                   value={lifeInsuranceCompany}
                   onChange={(e) => setLifeInsuranceCompany(e.target.value)}
                   placeholder="Ex: Porto Seguro, Bradesco, Prudential..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
                 />
               </div>
 
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-3">
+                <label className="block text-lg font-medium text-white mb-3">
                   Qual valor do prêmio mensal (R$)?
                 </label>
                 <input
@@ -163,7 +163,7 @@ export default function PatrimonyRetirementForm({
                     setDisplayLifeInsurancePremium(formatCurrencyInput(newCents));
                   }}
                   placeholder="R$ 0,00"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
                 />
               </div>
             </>
@@ -175,8 +175,8 @@ export default function PatrimonyRetirementForm({
               disabled={!isValid}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 isValid
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Continuar

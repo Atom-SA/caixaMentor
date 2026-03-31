@@ -30,14 +30,14 @@ export default function DependentsForm({ onContinue, onBack, canGoBack, formData
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
         <form id="dependents-form" onSubmit={handleSubmit} className="space-y-6">
           {/* Pergunta principal */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Você tem dependentes financeiros? (filhos ou familiares)
             </label>
             <div className="flex gap-4">
@@ -47,7 +47,7 @@ export default function DependentsForm({ onContinue, onBack, canGoBack, formData
                   className={`flex-1 text-center p-4 border rounded-lg cursor-pointer transition-colors ${
                     hasDependents === option
                       ? 'border-accent bg-blue-50'
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : 'border-white/20 hover:bg-white/5'
                   }`}
                 >
                   <input
@@ -63,7 +63,7 @@ export default function DependentsForm({ onContinue, onBack, canGoBack, formData
                     }}
                     className="hidden"
                   />
-                  <span className="capitalize text-gray-900">{option}</span>
+                  <span className="capitalize text-white">{option}</span>
                 </label>
               ))}
             </div>
@@ -72,7 +72,7 @@ export default function DependentsForm({ onContinue, onBack, canGoBack, formData
           {/* Se tiver dependentes, mostra a quantidade */}
           {hasDependents === 'sim' && (
             <div>
-              <label className="block text-lg font-medium text-gray-900 mb-4">
+              <label className="block text-lg font-medium text-white mb-4">
                 Quantos dependentes?
               </label>
               <div className="space-y-3">
@@ -82,7 +82,7 @@ export default function DependentsForm({ onContinue, onBack, canGoBack, formData
                     className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
                       dependentsCount === option
                         ? 'border-accent bg-blue-50'
-                        : 'border-gray-300 hover:bg-gray-50'
+                        : 'border-white/20 hover:bg-white/5'
                     }`}
                   >
                     <input
@@ -91,9 +91,9 @@ export default function DependentsForm({ onContinue, onBack, canGoBack, formData
                       value={option}
                       checked={dependentsCount === option}
                       onChange={(e) => setDependentsCount(e.target.value)}
-                      className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                      className="w-4 h-4 text-[#F2C94C] focus:ring-[#F2C94C]"
                     />
-                    <span className="ml-3 text-gray-900">{option}</span>
+                    <span className="ml-3 text-white">{option}</span>
                   </label>
                 ))}
               </div>
@@ -103,7 +103,7 @@ export default function DependentsForm({ onContinue, onBack, canGoBack, formData
         </form>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 px-6 pt-6 pb-16 bg-gradient-to-t from-slate-50 to-transparent">
+      <div className="fixed bottom-0 left-0 right-0 px-6 pt-6 pb-16 bg-gradient-to-t from-[#003366] to-transparent">
         <div className="w-full max-w-[576px] mx-auto">
           <button
             form="dependents-form"
@@ -113,8 +113,8 @@ export default function DependentsForm({ onContinue, onBack, canGoBack, formData
             }
             className={`w-full py-4 text-white rounded-full transition-colors duration-200 font-medium text-lg shadow-md ${
               hasDependents && (hasDependents === 'não' || dependentsCount)
-                ? 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg cursor-pointer'
-                : 'bg-black cursor-not-allowed'
+                ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 hover:shadow-lg cursor-pointer'
+                : 'bg-white/10 text-white/30 cursor-not-allowed'
             }`}
           >
             Continuar

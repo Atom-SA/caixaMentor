@@ -71,18 +71,18 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
-        <h2 className="text-2xl font-bold text-gray-900 mb-2">
+        <h2 className="text-2xl font-bold text-white mb-2">
           Investimentos
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* 23. Você já investe? */}
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Você já investe?
             </label>
             <div className="flex gap-4">
@@ -92,7 +92,7 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
                   className={`flex-1 text-center p-4 border rounded-lg cursor-pointer transition-colors ${
                     alreadyInvests === option
                       ? 'border-accent bg-slate-900/10'
-                      : 'border-gray-300 hover:bg-gray-50'
+                      : 'border-white/20 hover:bg-white/5'
                   }`}
                 >
                   <input
@@ -113,7 +113,7 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
                     }}
                     className="hidden"
                   />
-                  <span className="capitalize text-gray-900">{option}</span>
+                  <span className="capitalize text-white">{option}</span>
                 </label>
               ))}
             </div>
@@ -124,7 +124,7 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
             <>
               {/* Onde investe */}
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-4">
+                <label className="block text-lg font-medium text-white mb-4">
                   Onde investe atualmente?
                 </label>
                 <div className="space-y-3">
@@ -134,7 +134,7 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
                       className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
                         investmentTypes.includes(opt)
                           ? 'border-accent bg-slate-900/10'
-                          : 'border-gray-300 hover:bg-gray-50'
+                          : 'border-white/20 hover:bg-white/5'
                       }`}
                     >
                       <input
@@ -142,9 +142,9 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
                         value={opt}
                         checked={investmentTypes.includes(opt)}
                         onChange={() => handleCheckboxChange(opt)}
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                        className="w-4 h-4 text-[#F2C94C] focus:ring-[#F2C94C]"
                       />
-                      <span className="ml-3 text-gray-900">{opt}</span>
+                      <span className="ml-3 text-white">{opt}</span>
                     </label>
                   ))}
                 </div>
@@ -152,7 +152,7 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
 
               {/* Valor médio mensal */}
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-3">
+                <label className="block text-lg font-medium text-white mb-3">
                   Valor médio investido mensalmente
                 </label>
                 <input
@@ -163,14 +163,14 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
   setMonthlyInvestment(cents);
   setDisplayMonthlyInvestment(formatCurrencyInput(cents));
 }}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
                   placeholder="Ex: R$ 500,00"
                 />
               </div>
 
               {/* Quanto tem investido */}
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-3">
+                <label className="block text-lg font-medium text-white mb-3">
                   Quanto você tem investido?
                 </label>
                 <input
@@ -181,14 +181,14 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
   setTotalInvested(cents);
   setDisplayTotalInvested(formatCurrencyInput(cents));
 }}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+                  className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
                   placeholder="Ex: R$ 10.000,00"
                 />
               </div>
 
               {/* Objetivo */}
               <div>
-                <label className="block text-lg font-medium text-gray-900 mb-4">
+                <label className="block text-lg font-medium text-white mb-4">
                   Qual é o principal objetivo dos seus investimentos?
                 </label>
                 <div className="space-y-3">
@@ -198,7 +198,7 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
                       className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${
                         investmentGoal === opt
                           ? 'border-accent bg-slate-900/10'
-                          : 'border-gray-300 hover:bg-gray-50'
+                          : 'border-white/20 hover:bg-white/5'
                       }`}
                     >
                       <input
@@ -207,9 +207,9 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
                         value={opt}
                         checked={investmentGoal === opt}
                         onChange={(e) => setInvestmentGoal(e.target.value)}
-                        className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                        className="w-4 h-4 text-[#F2C94C] focus:ring-[#F2C94C]"
                       />
-                      <span className="ml-3 text-gray-900">{opt}</span>
+                      <span className="ml-3 text-white">{opt}</span>
                     </label>
                   ))}
                 </div>
@@ -223,8 +223,8 @@ const [displayMonthlyInvestment, setDisplayMonthlyInvestment] = useState(
               disabled={!isValid}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 isValid
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Continuar

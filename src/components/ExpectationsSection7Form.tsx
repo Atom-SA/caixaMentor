@@ -37,50 +37,50 @@ export default function ExpectationsSection7Form({ onContinue, onBack, canGoBack
   return (
     <>
       <PageHeader />
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 font-inter px-6 py-8 pt-20">
+      <div className="min-h-screen bg-[#003366] font-inter px-6 py-8 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
       <div className="w-full max-w-2xl mx-auto">
         <QuestionNumber number={questionNumber} />
         <div className="mb-6">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">
+          <h2 className="text-2xl font-bold text-white mb-2">
             Seção 7 – Expectativas e Engajamento
           </h2>
-          <p className="text-gray-600">
+          <p className="text-white/60">
             Por fim, quero entender suas expectativas sobre o acompanhamento financeiro e o que seria um resultado de sucesso pra você.
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               O que você busca com esse acompanhamento financeiro?
             </label>
             <div className="space-y-3">
               {goalOptions.map((option) => (
                 <label
                   key={option}
-                  className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  className="flex items-center p-4 border border-white/20 rounded-lg cursor-pointer hover:bg-white/5 transition-colors"
                 >
                   <input
                     type="checkbox"
                     checked={consultingGoals.includes(option)}
                     onChange={() => handleGoalToggle(option)}
-                    className="w-4 h-4 text-blue-600 focus:ring-blue-600 rounded"
+                    className="w-4 h-4 text-[#F2C94C] focus:ring-[#F2C94C] rounded"
                   />
-                  <span className="ml-3 text-gray-900">{option}</span>
+                  <span className="ml-3 text-white">{option}</span>
                 </label>
               ))}
             </div>
           </div>
 
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-3">
+            <label className="block text-lg font-medium text-white mb-3">
               O que te faria considerar essa consultoria um sucesso?
             </label>
             <textarea
               value={successDefinition}
               onChange={(e) => setSuccessDefinition(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent"
+              className="w-full px-4 py-3 border border-white/20 rounded-lg focus:ring-2 focus:ring-accent focus:border-transparent bg-white/10 text-white placeholder:text-white/40"
               rows={5}
               placeholder="Descreva o que seria um resultado bem-sucedido para você..."
               required
@@ -93,8 +93,8 @@ export default function ExpectationsSection7Form({ onContinue, onBack, canGoBack
               disabled={consultingGoals.length === 0 || !successDefinition}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 consultingGoals.length > 0 && successDefinition
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Finalizar

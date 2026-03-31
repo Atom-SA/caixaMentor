@@ -27,18 +27,18 @@ export default function WorkRegimeForm({ onContinue, onBack, canGoBack, formData
       <PageHeader />
       <div className="w-full max-w-2xl mx-auto px-4 pt-20">
       <BackButton onClick={() => onBack?.()} show={!!canGoBack} />
-      <div className="bg-white rounded-lg shadow-sm p-8">
+      <div className="bg-white/10 rounded-lg shadow-sm p-8">
         <QuestionNumber number={questionNumber} />
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-lg font-medium text-gray-900 mb-4">
+            <label className="block text-lg font-medium text-white mb-4">
               Regime de trabalho
             </label>
             <div className="space-y-3">
               {options.map((option) => (
                 <label
                   key={option}
-                  className="flex items-center p-4 border border-gray-300 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                  className="flex items-center p-4 border border-white/20 rounded-lg cursor-pointer hover:bg-white/5 transition-colors"
                 >
                   <input
                     type="radio"
@@ -46,9 +46,9 @@ export default function WorkRegimeForm({ onContinue, onBack, canGoBack, formData
                     value={option}
                     checked={workRegime === option}
                     onChange={(e) => setWorkRegime(e.target.value)}
-                    className="w-4 h-4 text-blue-600 focus:ring-blue-600"
+                    className="w-4 h-4 text-[#F2C94C] focus:ring-[#F2C94C]"
                   />
-                  <span className="ml-3 text-gray-900">{option}</span>
+                  <span className="ml-3 text-white">{option}</span>
                 </label>
               ))}
             </div>
@@ -60,8 +60,8 @@ export default function WorkRegimeForm({ onContinue, onBack, canGoBack, formData
               disabled={!workRegime}
               className={`w-full max-w-[576px] mx-auto text-white py-3 px-6 rounded-full font-medium transition-colors ${
                 workRegime
-                  ? 'bg-blue-600 hover:bg-blue-700 cursor-pointer'
-                  : 'bg-black cursor-not-allowed'
+                  ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 cursor-pointer'
+                  : 'bg-white/10 text-white/30 cursor-not-allowed'
               }`}
             >
               Continuar

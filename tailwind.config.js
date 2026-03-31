@@ -9,11 +9,10 @@ export default {
         'sans': ['Inter', 'system-ui', 'sans-serif'],
       },
       colors: {
-        accent: '#0960ae',
-        primary: '#0052FF',
-      },
-      accentColor: {
-        DEFAULT: '#003366',
+        accent: '#F2C94C',
+        primary: '#003366',
+        navy: '#07090F',
+        surface: 'rgba(255,255,255,0.05)',
       },
     },
   },
