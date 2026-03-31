@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BookOpen, Route, BarChart3, ChevronLeft } from 'lucide-react';
+import { BookOpen, Route, BarChart3 } from 'lucide-react';
 import Logo from './Logo';
 import CoursesPage from './CoursesPage';
 import TrilhaPage from './TrilhaPage';
@@ -54,12 +54,6 @@ export default function CaixaEducaPage({ onBack }: CaixaEducaPageProps) {
           {/* Top bar */}
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-3">
-              <button
-                onClick={onBack}
-                className="flex items-center gap-1.5 text-white/50 hover:text-white transition-colors text-sm"
-              >
-                <ChevronLeft className="w-4 h-4" />
-              </button>
               <Logo invert height="h-4" />
             </div>
             <span className="text-xs font-medium text-white/40 tracking-widest uppercase">

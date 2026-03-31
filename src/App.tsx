@@ -6,25 +6,30 @@ import ReportsPage from './components/ReportsPage';
 import { navigate } from './utils/navigate';
 
 function App() {
-  const [currentRoute, setCurrentRoute] = useState<string>(window.location.pathname || '/');
+  const [currentRoute, setCurrentRoute] = useState<string>(window.location.pathname || '/plataforma');
 
   useEffect(() => {
     const handlePopState = () => {
-      setCurrentRoute(window.location.pathname || '/');
+      setCurrentRoute(window.location.pathname || '/plataforma');
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigateToHome = () => navigate('/');
+  const navigateToPlataforma = () => navigate('/plataforma');
+
+  if (currentRoute === '/' || currentRoute === '') {
+    navigate('/plataforma');
+    return null;
+  }
 
   if (currentRoute === '/plataforma') {
-    return <CaixaEducaPage onBack={navigateToHome} />;
+    return <CaixaEducaPage onBack={navigateToPlataforma} />;
   }
 
   if (currentRoute === '/watch') {
-    return <PlayerPage onBack={navigateToHome} />;
+    return <PlayerPage onBack={navigateToPlataforma} />;
   }
 
   if (currentRoute === '/insights') {
