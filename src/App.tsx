@@ -1,31 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import FormNavigation from './components/FormNavigation';
 import PlayerPage from './components/PlayerPage';
+import CaixaEducaPage from './components/CaixaEducaPage';
+import ReportsPage from './components/ReportsPage';
+import { navigate } from './utils/navigate';
 
 function App() {
-  const [currentRoute, setCurrentRoute] = useState<string>('/');
+  const [currentRoute, setCurrentRoute] = useState<string>(window.location.pathname || '/');
 
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.slice(1);
-      setCurrentRoute(hash || '/');
+    const handlePopState = () => {
+      setCurrentRoute(window.location.pathname || '/');
     };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange);
-    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigateToHome = () => {
-    window.location.hash = '';
-    setCurrentRoute('/');
-  };
+  const navigateToHome = () => navigate('/');
 
-  if (currentRoute === '/player') {
+  if (currentRoute === '/plataforma') {
+    return <CaixaEducaPage onBack={navigateToHome} />;
+  }
+
+  if (currentRoute === '/watch') {
     return <PlayerPage onBack={navigateToHome} />;
+  }
+
+  if (currentRoute === '/insights') {
+    return <ReportsPage />;
   }
 
   return <FormNavigation />;

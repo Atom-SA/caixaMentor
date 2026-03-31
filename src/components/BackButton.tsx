@@ -14,10 +14,10 @@ export default function BackButton({ onClick, show, lightMode = false }: BackBut
     <button
       type="button"
       onClick={onClick}
-      className="fixed top-6 left-6 p-2 hover:opacity-60 transition-opacity duration-200 z-50"
+      className="fixed top-5 left-4 p-2.5 rounded-xl bg-white/[0.07] hover:bg-white/[0.12] backdrop-blur-sm transition-all duration-200 z-50 active:scale-95"
       aria-label="Voltar"
     >
-      <ChevronLeft className={`w-7 h-7 ${lightMode ? 'text-white' : 'text-white'}`} />
+      <ChevronLeft className="w-5 h-5 text-white/80" />
     </button>
   );
 }

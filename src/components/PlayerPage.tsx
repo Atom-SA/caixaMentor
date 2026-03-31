@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ChevronLeft, Menu, Play, MessageCircle } from 'lucide-react';
+import { navigate } from '../utils/navigate';
 
 interface PlayerPageProps {
   onBack: () => void;
@@ -69,6 +70,7 @@ export default function PlayerPage({ onBack }: PlayerPageProps) {
       <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-white/10 z-50">
         <div className="flex items-center justify-around py-3">
           <button
+            onClick={() => navigate('/')}
             className="flex flex-col items-center gap-1 px-6 py-2 text-white/60 hover:text-white transition-colors"
           >
             <Menu className="w-6 h-6" />

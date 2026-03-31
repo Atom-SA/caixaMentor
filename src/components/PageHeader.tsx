@@ -8,14 +8,8 @@ interface PageHeaderProps {
 }
 
 export default function PageHeader({ transparent = false, invertLogo = true, darkBg = false }: PageHeaderProps) {
-  const bgClass = darkBg
-    ? 'bg-[#003366]'
-    : transparent
-    ? 'bg-transparent'
-    : 'bg-[#003366]';
-
   return (
-    <div className={bgClass}>
+    <div className="fixed top-0 left-0 right-0 z-40 bg-gradient-to-b from-[#003366] via-[#003366]/95 to-transparent">
       <div className="max-w-2xl mx-auto px-6 py-4">
         <Logo height="h-5" invert={invertLogo} />
       </div>

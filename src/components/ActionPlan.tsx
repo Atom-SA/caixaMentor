@@ -2,7 +2,7 @@ import React from 'react';
 import { FormStepProps } from '../types/form';
 import PageHeader from './PageHeader';
 import BackButton from './BackButton';
-import { BookOpen, TrendingUp, Sparkles, Check, Lock } from 'lucide-react';
+import { BookOpen, TrendingUp, Sparkles, Check, Lock, ChevronRight } from 'lucide-react';
 
 interface ActionPlanProps extends FormStepProps {
   onStartCourses?: () => void;
@@ -15,7 +15,7 @@ const ActionPlan: React.FC<ActionPlanProps> = ({ formData, onBack, canGoBack, on
       icon: BookOpen,
       title: 'Fundamentos do seu dinheiro',
       subtitle: 'Educação financeira',
-      description: 'Organize seu mês em 15 minutos.',
+      description: 'Organize seu mês em 15 minutos e saiba exatamente para onde vai cada real.',
       buttonText: 'Começar agora',
       available: true,
       completed: false,
@@ -25,7 +25,7 @@ const ActionPlan: React.FC<ActionPlanProps> = ({ formData, onBack, canGoBack, on
       icon: TrendingUp,
       title: 'Construção de patrimônio',
       subtitle: 'Metas e constância',
-      description: 'Crie metas e avance com constância.',
+      description: 'Crie metas realistas e construa hábitos que fazem seu dinheiro crescer.',
       buttonText: 'Em seguida',
       available: false,
       completed: false,
@@ -35,7 +35,7 @@ const ActionPlan: React.FC<ActionPlanProps> = ({ formData, onBack, canGoBack, on
       icon: Sparkles,
       title: 'Tecnologia aplicada às suas finanças',
       subtitle: 'IA em finanças',
-      description: 'Acompanhamento inteligente',
+      description: 'Acompanhamento inteligente para otimizar cada decisão financeira.',
       buttonText: 'Em breve',
       available: false,
       completed: false,
@@ -45,101 +45,112 @@ const ActionPlan: React.FC<ActionPlanProps> = ({ formData, onBack, canGoBack, on
   return (
     <>
       <PageHeader darkBg invertLogo />
-      <div className="min-h-screen bg-[#003366] font-inter px-4 sm:px-6 py-6 sm:py-8 pt-20">
+      <div className="min-h-screen bg-gradient-to-b from-[#003366] via-[#003366] to-[#002244] font-inter px-4 sm:px-6 py-6 sm:py-8 pt-20 pb-8">
         <BackButton onClick={() => onBack?.()} show={!!canGoBack} lightMode />
-        <div className="max-w-4xl w-full mx-auto">
-          <div className="text-center mb-12 sm:mb-16 animate-fade-in">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-3 sm:mb-4 tracking-tight">
+        <div className="max-w-2xl w-full mx-auto">
+          {/* Header */}
+          <div className="text-center mb-10 sm:mb-12">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight animate-fade-in">
               Seu Plano de Evolução
             </h1>
-            <p className="text-base sm:text-lg md:text-xl text-white/80 mb-4 sm:mb-6">
-              Progresso: Etapa 1 de 3
-            </p>
-            <div className="max-w-sm sm:max-w-md mx-auto bg-white/10 rounded-full h-2.5 sm:h-3 overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r from-[#F2C94C] to-[#E5BD43] rounded-full transition-all duration-1000 ease-out"
-                style={{ width: '33%' }}
-              />
+
+            {/* Progress indicator */}
+            <div className="inline-flex items-center gap-3 glass-card rounded-full px-5 py-2.5 animate-fade-in-delay-1">
+              <span className="text-sm text-white/60">Progresso</span>
+              <div className="w-24 sm:w-32 bg-white/10 rounded-full h-2 overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-[#F2C94C] to-[#E5A832] rounded-full animate-progress-fill"
+                  style={{ width: '33%' }}
+                />
+              </div>
+              <span className="text-sm font-semibold text-[#F2C94C]">1/3</span>
             </div>
           </div>
 
-          <div className="relative">
+          {/* Steps timeline */}
+          <div className="relative space-y-4">
+            {/* Timeline vertical line */}
+            <div className="absolute left-[27px] sm:left-[31px] top-8 bottom-8 w-[2px] bg-gradient-to-b from-[#F2C94C]/40 via-white/10 to-white/5 z-0" />
+
             {steps.map((step, index) => {
               const Icon = step.icon;
-              const isLast = index === steps.length - 1;
 
               return (
-                <div key={step.number} className="relative pb-8 sm:pb-12">
-                  {!isLast && (
-                    <div className="hidden sm:block absolute left-7 md:left-8 top-20 bottom-0 w-0.5 sm:w-1 bg-white/20"
-                         style={{
-                           background: step.completed
-                             ? 'linear-gradient(180deg, #F2C94C 0%, rgba(242, 201, 76, 0.3) 100%)'
-                             : 'rgba(255, 255, 255, 0.2)'
-                         }}
-                    />
-                  )}
-
+                <div
+                  key={step.number}
+                  className="relative z-10 animate-slide-up"
+                  style={{ animationDelay: `${index * 120}ms` }}
+                >
                   <div
-                    className={`relative backdrop-blur-sm bg-white/10 rounded-2xl sm:rounded-3xl p-5 sm:p-8 border transition-all duration-500 animate-slide-up ${
+                    className={`relative rounded-2xl sm:rounded-3xl p-5 sm:p-6 border transition-all duration-500 ${
                       step.available
-                        ? 'border-[#F2C94C] shadow-2xl hover:shadow-[#F2C94C]/20 hover:border-[#F2C94C]/80'
-                        : 'border-white/20'
+                        ? 'glass-card border-[#F2C94C]/40 shadow-lg shadow-[#F2C94C]/5 animate-glow-pulse'
+                        : 'bg-white/[0.03] border-white/[0.06]'
                     }`}
-                    style={{ animationDelay: `${index * 150}ms` }}
                   >
-                    <div className="flex items-start gap-4 sm:gap-6">
+                    <div className="flex items-start gap-4 sm:gap-5">
+                      {/* Step circle */}
                       <div className="relative flex-shrink-0">
-                        <div className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 ${
-                          step.completed
-                            ? 'bg-[#F2C94C]'
-                            : step.available
-                            ? 'bg-[#F2C94C] animate-pulse-soft'
-                            : 'bg-white/20'
-                        }`}>
+                        <div
+                          className={`w-[54px] h-[54px] sm:w-[62px] sm:h-[62px] rounded-2xl flex items-center justify-center transition-all duration-300 ${
+                            step.completed
+                              ? 'bg-gradient-to-br from-[#F2C94C] to-[#E5A832]'
+                              : step.available
+                              ? 'bg-gradient-to-br from-[#F2C94C] to-[#E5A832] shadow-md shadow-[#F2C94C]/20'
+                              : 'bg-white/8'
+                          }`}
+                        >
                           {step.completed ? (
-                            <Check className="w-7 h-7 sm:w-8 sm:h-8 text-[#003366]" strokeWidth={3} />
+                            <Check className="w-7 h-7 text-[#003366]" strokeWidth={3} />
                           ) : step.available ? (
-                            <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-[#003366]" strokeWidth={2} />
+                            <Icon className="w-7 h-7 text-[#003366]" strokeWidth={2} />
                           ) : (
-                            <Lock className="w-7 h-7 sm:w-8 sm:h-8 text-white/50" strokeWidth={2} />
+                            <Lock className="w-6 h-6 text-white/30" strokeWidth={2} />
                           )}
                         </div>
-                        <div className={`absolute -bottom-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs font-bold ${
-                          step.completed || step.available
-                            ? 'bg-[#003366] text-[#F2C94C]'
-                            : 'bg-white/20 text-white/50'
-                        }`}>
+                        {/* Step number badge */}
+                        <div
+                          className={`absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold ring-2 ring-[#003366] ${
+                            step.completed || step.available
+                              ? 'bg-[#F2C94C] text-[#003366]'
+                              : 'bg-white/15 text-white/40'
+                          }`}
+                        >
                           {step.number}
                         </div>
                       </div>
 
-                      <div className="flex-1 min-w-0">
-                        <div className="space-y-2 mb-3 sm:mb-2">
-                          <div className="flex items-start justify-between gap-2">
-                            <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-white leading-tight">
-                              {step.title}
-                            </h3>
-                          </div>
-                          <div className="flex items-center gap-2 flex-wrap">
-                            <p className={`text-xs sm:text-sm font-medium ${step.available ? 'text-[#F2C94C]' : 'text-white/60'}`}>
-                              {step.subtitle}
-                            </p>
-                            {step.completed && (
-                              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-[#F2C94C]/20 text-[#F2C94C] rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap">
-                                <Check size={12} strokeWidth={3} />
-                                Concluído
-                              </div>
-                            )}
-                            {!step.available && !step.completed && (
-                              <div className="flex items-center gap-1.5 px-2.5 py-1 bg-white/10 text-white/50 rounded-full text-[10px] sm:text-xs font-semibold whitespace-nowrap">
-                                <Lock size={12} />
-                                Bloqueado
-                              </div>
-                            )}
-                          </div>
+                      {/* Content */}
+                      <div className="flex-1 min-w-0 pt-0.5">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                          <h3 className={`text-base sm:text-lg font-bold leading-snug ${
+                            step.available ? 'text-white' : 'text-white/40'
+                          }`}>
+                            {step.title}
+                          </h3>
                         </div>
-                        <p className="text-sm sm:text-base text-white/80 mb-4 sm:mb-6 leading-relaxed">
+
+                        <div className="flex items-center gap-2 mb-2.5">
+                          <p className={`text-xs font-medium ${
+                            step.available ? 'text-[#F2C94C]' : 'text-white/30'
+                          }`}>
+                            {step.subtitle}
+                          </p>
+                          {step.completed && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#F2C94C]/15 text-[#F2C94C] rounded-full text-[10px] font-semibold">
+                              <Check size={10} strokeWidth={3} /> Concluído
+                            </span>
+                          )}
+                          {!step.available && !step.completed && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-white/5 text-white/30 rounded-full text-[10px] font-semibold">
+                              <Lock size={10} /> Bloqueado
+                            </span>
+                          )}
+                        </div>
+
+                        <p className={`text-sm leading-relaxed mb-4 ${
+                          step.available ? 'text-white/60' : 'text-white/25'
+                        }`}>
                           {step.description}
                         </p>
 
@@ -150,13 +161,14 @@ const ActionPlan: React.FC<ActionPlanProps> = ({ formData, onBack, canGoBack, on
                               onStartCourses();
                             }
                           }}
-                          className={`w-full sm:w-auto px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-semibold text-sm sm:text-base transition-all duration-300 ${
+                          className={`inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
                             step.available
-                              ? 'bg-[#F2C94C] text-[#003366] hover:bg-[#F2C94C]/90 shadow-lg hover:shadow-[#F2C94C]/30 hover:scale-105 active:scale-95 cursor-pointer'
-                              : 'bg-white/10 text-white/40 cursor-not-allowed'
+                              ? 'bg-gradient-to-r from-[#F2C94C] to-[#E5A832] text-[#003366] shadow-md shadow-[#F2C94C]/15 hover:brightness-110 active:scale-[0.97] cursor-pointer'
+                              : 'bg-white/5 text-white/20 cursor-not-allowed'
                           }`}
                         >
                           {step.buttonText}
+                          {step.available && <ChevronRight className="w-4 h-4" />}
                         </button>
                       </div>
                     </div>
@@ -166,59 +178,14 @@ const ActionPlan: React.FC<ActionPlanProps> = ({ formData, onBack, canGoBack, on
             })}
           </div>
 
-          <div className="mt-6 sm:mt-8 text-center animate-fade-in px-4" style={{ animationDelay: '450ms' }}>
-            <p className="text-white/70 text-sm sm:text-base">
+          {/* Footer message */}
+          <div className="mt-8 text-center animate-fade-in-delay-3 px-4">
+            <p className="text-white/40 text-sm">
               Complete cada etapa para desbloquear a próxima e avançar no seu plano financeiro
             </p>
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slide-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes pulse-soft {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-        }
-
-        .animate-fade-in {
-          animation: fade-in 0.6s ease-out forwards;
-        }
-
-        .animate-slide-up {
-          animation: slide-up 0.6s ease-out forwards;
-          opacity: 0;
-        }
-
-        .animate-pulse-soft {
-          animation: pulse-soft 2s ease-in-out infinite;
-        }
-      `}</style>
     </>
   );
 };

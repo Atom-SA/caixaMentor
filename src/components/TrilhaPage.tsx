@@ -1,4 +1,5 @@
 import { Brain, CheckCircle2, Lock, Play, Clock, Zap, ChevronRight } from 'lucide-react';
+import { navigate } from '../utils/navigate';
 
 interface AILesson {
   id: string;
@@ -168,7 +169,7 @@ export default function TrilhaPage() {
                 {/* Action */}
                 {!isLocked && (
                   <button
-                    onClick={() => { window.location.hash = '/player'; }}
+                    onClick={() => navigate('/watch')}
                     className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 transition-all ${
                       isCurrent
                         ? 'bg-accent text-navy hover:brightness-110'

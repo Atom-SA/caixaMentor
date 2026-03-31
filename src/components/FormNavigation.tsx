@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FormData } from '../types/form';
 import { formConfig, findStepById, getFirstStep } from '../formConfig';
 import ResultsPage from './ResultsPage';
-import CaixaEducaPage from './CaixaEducaPage';
+import { navigate } from '../utils/navigate';
 
 // sessionStorage key for form data
 const FORM_DATA_STORAGE_KEY = 'prevent-quiz-responses';
@@ -44,8 +44,6 @@ export default function FormNavigation() {
   const [history, setHistory] = useState<string[]>([]); // Track visited steps for back navigation
   const [isComplete, setIsComplete] = useState(false);
   const [finalPrice, setFinalPrice] = useState<string | null>(null);
-  const [showCaixaEduca, setShowCaixaEduca] = useState(false);
-
   // Dynamic sub-flow state for hormone therapy
   const [isDynamicSubFlowActive, setIsDynamicSubFlowActive] = useState(false);
   const [dynamicMedicationQueue, setDynamicMedicationQueue] = useState<string[]>([]);
@@ -235,11 +233,6 @@ export default function FormNavigation() {
 
   // Handle back navigation
   const handleBack = () => {
-    if (showCaixaEduca) {
-      setShowCaixaEduca(false);
-      return;
-    }
-
     if (isComplete) {
       // If we're on the complete screen, go back to last step
       setIsComplete(false);
@@ -353,12 +346,8 @@ export default function FormNavigation() {
 
   // Render the current step component
   const renderCurrentStep = () => {
-    if (showCaixaEduca) {
-      return <CaixaEducaPage onBack={handleBack} />;
-    }
-
     if (isComplete) {
-      return <ResultsPage formData={formData} onBack={handleBack} canGoBack={canGoBack()} finalPrice={finalPrice || undefined} onStartCaixaEduca={() => setShowCaixaEduca(true)} />;
+      return <ResultsPage formData={formData} onBack={handleBack} canGoBack={canGoBack()} finalPrice={finalPrice || undefined} onStartCaixaEduca={() => navigate('/plataforma')} />;
     }
 
     const currentStep = getCurrentStep();
@@ -405,7 +394,7 @@ export default function FormNavigation() {
 
     // Add onStartCourses prop if this is the ActionPlan component
     const componentProps = currentStepId === 'plan'
-      ? { ...baseProps, onStartCourses: () => setShowCaixaEduca(true) }
+      ? { ...baseProps, onStartCourses: () => navigate('/plataforma') }
       : baseProps;
 
     return (

@@ -1,4 +1,5 @@
 import { ChevronLeft, Clock, BarChart3, BookOpen, Play, Lock } from 'lucide-react';
+import { navigate } from '../utils/navigate';
 import type { CourseData } from './CaixaEducaPage';
 
 interface CourseDetailPageProps {
@@ -75,7 +76,7 @@ export default function CourseDetailPage({ course, onBack }: CourseDetailPagePro
 
         {/* CTA */}
         <button
-          onClick={() => { window.location.hash = '/player'; }}
+          onClick={() => navigate('/watch')}
           className="w-full sm:w-auto mb-10 flex items-center justify-center gap-2 px-8 py-3.5 bg-accent text-navy rounded-xl font-bold text-sm hover:brightness-110 transition-all active:scale-[0.98] shadow-lg shadow-accent/20"
         >
           <Play className="w-4 h-4" />
@@ -136,7 +137,7 @@ export default function CourseDetailPage({ course, onBack }: CourseDetailPagePro
                   {/* Play */}
                   {!isLocked && (
                     <button
-                      onClick={() => { window.location.hash = '/player'; }}
+                      onClick={() => navigate('/watch')}
                       className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all ${
                         isCurrent
                           ? 'bg-accent text-navy hover:brightness-110'
